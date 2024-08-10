@@ -2,5 +2,5 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ["nuxtjs-naive-ui"],
+  modules: ["nuxtjs-naive-ui", '@nuxtjs/tailwindcss', "@nuxt/eslint"],
 })

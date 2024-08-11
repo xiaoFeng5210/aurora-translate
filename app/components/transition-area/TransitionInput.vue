@@ -46,6 +46,11 @@ const handleSelect = (data: string) => {
   color: #333;
   border-radius: 5px;
   box-sizing: border-box;
+
+  &:hover {
+    box-shadow: none;
+    border: 1px solid #00bd58;
+  }
   
   textarea {
     min-height: 240px;
@@ -81,8 +86,8 @@ const handleSelect = (data: string) => {
   }
 }
 
-.transition_input:hover {
-    box-shadow: none;
-    border: 1px solid #00bd58;
-}
+//.transition_input:hover {
+//    box-shadow: none;
+//    border: 1px solid #00bd58;
+//}
 </style>

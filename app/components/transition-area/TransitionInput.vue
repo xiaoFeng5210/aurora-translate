@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   addStyle,
-  changeTranslateFromSelect, clearStyle,
+  changeTranslateFromSelect, clearStyle, handleSelectLanguage,
   translateFromOptions,
   useTranslateFromSelect
 } from "~/composables/useTranslateFrom";
@@ -9,17 +9,15 @@ import {debounce} from 'lodash';
 
 const languageSelected = useTranslateFromSelect();
 const isShowSelectPanel = ref(false);
+
 const switchExpandSelectLanguage = () => {
   isShowSelectPanel.value = !isShowSelectPanel.value;
-}
-
-const handleSelect = (data: string) => {
-  changeTranslateFromSelect(data)
 }
 
 const getText = (e: Event) => {
   console.log((e.target as HTMLTextAreaElement).value)
 }
+
 const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});
 
 
@@ -32,7 +30,7 @@ const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});
           trigger="hover"
           placement="bottom-start"
           :options="translateFromOptions"
-          @select="handleSelect"
+          @select="handleSelectLanguage"
       >
       <div class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded" @click="switchExpandSelectLanguage">
         <span>{{ languageSelected.text }}</span>

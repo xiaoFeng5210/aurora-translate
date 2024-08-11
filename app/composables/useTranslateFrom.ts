@@ -6,8 +6,9 @@ export const useTranslateFromSelect = () => useState<SelectFrom>('configSelect',
 }))
 
 
-export const useInputText = () => useState<string>('inputText', () => '')
-
+export const handleSelectLanguage = (key: string) => {
+	changeTranslateFromSelect(key, '点击dropdown切换翻译语言')
+}
 export const changeTranslateFromSelect = (key: string, log?: string) => {
 	const originSelect = useTranslateFromSelect()
 	const newSelect = translateFromOptions.find(item => item.key === key)

@@ -15,6 +15,10 @@ const handleSelect = (data: string) => {
   changeTranslateFromSelect(data)
 }
 
+const getText = (e: Event) => {
+  console.log((e.target as HTMLTextAreaElement).value)
+}
+
 </script>
 
 <template>
@@ -35,7 +39,7 @@ const handleSelect = (data: string) => {
 
       <img class="w-[16px] h-[16px] ml-[5px]" src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png" alt="">
     </header>
-    <textarea placeholder="请输入要翻译的文字"></textarea>
+    <textarea placeholder="请输入要翻译的文字"  @input="getText"></textarea>
     
   </div>
 </template>
@@ -85,9 +89,4 @@ const handleSelect = (data: string) => {
     }
   }
 }
-
-//.transition_input:hover {
-//    box-shadow: none;
-//    border: 1px solid #00bd58;
-//}
 </style>

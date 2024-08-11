@@ -5,6 +5,9 @@ export const useTranslateFromSelect = () => useState<SelectFrom>('configSelect',
 	text: '自动识别'	
 }))
 
+
+export const useInputText = () => useState<string>('inputText', () => '')
+
 export const changeTranslateFromSelect = (key: string, log?: string) => {
 	const originSelect = useTranslateFromSelect()
 	const newSelect = translateFromOptions.find(item => item.key === key)

@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {
-  addStyle,
-  changeTranslateFromSelect, clearStyle, handleSelectLanguage,
-  translateFromOptions,
-  useTranslateFromSelect
-} from "~/composables/useTranslateFrom";
+import { addStyle, clearStyle, handleSelectLanguage, translateFromOptions, useTranslateFromSelect} from "~/composables/useTranslateFrom";
 import {debounce} from 'lodash';
 
 const languageSelected = useTranslateFromSelect();

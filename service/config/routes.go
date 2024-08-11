@@ -8,4 +8,5 @@ import (
 
 func Routes(r *gin.Engine) {
 	r.GET("/ping", api.Ping)
+	r.POST("/translate/text", api.TranslateText)
 }

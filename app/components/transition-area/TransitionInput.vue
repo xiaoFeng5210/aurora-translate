@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import {changeTranslateFromSelect, translateFromOptions, useTranslateFromSelect} from "~/composables/useTranslateFrom";
+import {
+  addStyle,
+  changeTranslateFromSelect, clearStyle,
+  translateFromOptions,
+  useTranslateFromSelect
+} from "~/composables/useTranslateFrom";
 const languageSelected = useTranslateFromSelect();
 const isShowSelectPanel = ref(false);
 const switchExpandSelectLanguage = () => {
@@ -13,7 +18,7 @@ const handleSelect = (data: string) => {
 </script>
 
 <template>
-  <div class="transition_input inline-flex flex-col">
+  <div id="translate_from_area" class="transition_input inline-flex flex-col" @mouseenter="addStyle" @mouseleave="clearStyle">
     <header class="w-full h-[40px] cursor-pointer inline-flex items-center">
       <n-dropdown
           trigger="hover"
@@ -46,11 +51,6 @@ const handleSelect = (data: string) => {
   color: #333;
   border-radius: 5px;
   box-sizing: border-box;
-
-  &:hover {
-    box-shadow: none;
-    border: 1px solid #00bd58;
-  }
   
   textarea {
     min-height: 240px;

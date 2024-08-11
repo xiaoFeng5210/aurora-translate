@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import type {SelectFrom} from "~/types/common";
-import {translateFromOptions, useTranslateFromSelect} from "~/composables/useTranslateFrom";
-
+import {changeTranslateFromSelect, translateFromOptions, useTranslateFromSelect} from "~/composables/useTranslateFrom";
 const languageSelected = useTranslateFromSelect();
 const isShowSelectPanel = ref(false);
 const switchExpandSelectLanguage = () => {
   isShowSelectPanel.value = !isShowSelectPanel.value;
 }
 
-const handleSelect = (data: SelectFrom) => {
-  console.log(data)
+const handleSelect = (data: string) => {
+  changeTranslateFromSelect(data)
 }
 
 </script>
 
 <template>
-  <div class="transition_input">
+  <div class="transition_input inline-flex flex-col">
     <header class="w-full h-[40px] cursor-pointer inline-flex items-center">
       <n-dropdown
           trigger="hover"
@@ -32,6 +30,8 @@ const handleSelect = (data: SelectFrom) => {
 
       <img class="w-[16px] h-[16px] ml-[5px]" src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png" alt="">
     </header>
+    <textarea placeholder="请输入要翻译的文字"></textarea>
+    
   </div>
 </template>
 
@@ -40,12 +40,32 @@ const handleSelect = (data: SelectFrom) => {
   width: 100%;
   height: 100%;
   background: white;
-  border: 1px solid transparent;
+  //border: 1px solid transparent;
   box-shadow: 0 6px 18px #41a36f0f;
   padding: 15px 20px 20px;
   color: #333;
   border-radius: 5px;
   box-sizing: border-box;
+  
+  textarea {
+    min-height: 240px;
+    cursor: pointer;
+    resize: none;
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 18px !important;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+    overflow: auto;
+    &:focus {
+      //outline: none;
+    }
+    &:focus-visible {
+      outline: none;
+    }
+  }
   
   header {
     .from_language {

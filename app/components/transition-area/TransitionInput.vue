@@ -5,7 +5,7 @@ import {
   translateFromOptions,
   useTranslateFromSelect
 } from "~/composables/useTranslateFrom";
-import {throttle} from 'lodash';
+import {debounce} from 'lodash';
 
 const languageSelected = useTranslateFromSelect();
 const isShowSelectPanel = ref(false);
@@ -20,7 +20,7 @@ const handleSelect = (data: string) => {
 const getText = (e: Event) => {
   console.log((e.target as HTMLTextAreaElement).value)
 }
-const handlerGetText = throttle(getText, 800, {leading: false, trailing: true});
+const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});
 
 
 </script>

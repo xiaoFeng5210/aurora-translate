@@ -20,6 +20,13 @@
   "devDependencies": {
     "@nuxt/test-utils": "^3.14.0",
     "@nuxtjs/tailwindcss": "^6.12.1",
+    "autoprefixer": "^10.4.20",
+    "naive-ui": "^2.39.0",
+    "postcss": "^8.4.41",
+    "sass": "^1.77.8",
+    "tailwindcss": "^3.4.9",
+    "unplugin-auto-import": "^0.18.2",
+    "unplugin-vue-components": "^0.27.3",
     "vitest": "^2.0.5"
   }
 }

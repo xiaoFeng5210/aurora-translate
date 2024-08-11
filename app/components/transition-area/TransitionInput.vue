@@ -5,6 +5,8 @@ import {
   translateFromOptions,
   useTranslateFromSelect
 } from "~/composables/useTranslateFrom";
+import {throttle} from 'lodash';
+
 const languageSelected = useTranslateFromSelect();
 const isShowSelectPanel = ref(false);
 const switchExpandSelectLanguage = () => {
@@ -18,6 +20,8 @@ const handleSelect = (data: string) => {
 const getText = (e: Event) => {
   console.log((e.target as HTMLTextAreaElement).value)
 }
+const handlerGetText = throttle(getText, 800, {leading: false, trailing: true});
+
 
 </script>
 
@@ -39,7 +43,7 @@ const getText = (e: Event) => {
 
       <img class="w-[16px] h-[16px] ml-[5px]" src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png" alt="">
     </header>
-    <textarea placeholder="请输入要翻译的文字"  @input="getText"></textarea>
+    <textarea placeholder="请输入要翻译的文字"  @input="handlerGetText"></textarea>
     
   </div>
 </template>

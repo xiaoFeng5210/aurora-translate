@@ -8,6 +8,9 @@ dependencies:
   '@nuxt/eslint':
     specifier: ^0.5.0
     version: 0.5.0(eslint@8.57.0)(typescript@5.5.4)(vite@5.4.0)
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   nuxt:
     specifier: ^3.12.4
     version: 3.12.4(eslint@8.57.0)(sass@1.77.8)(typescript@5.5.4)(vite@5.4.0)
@@ -25,6 +28,9 @@ devDependencies:
   '@nuxtjs/tailwindcss':
     specifier: ^6.12.1
     version: 6.12.1
+  '@types/lodash':
+    specifier: ^4.17.7
+    version: 4.17.7
   autoprefixer:
     specifier: ^10.4.20
     version: 10.4.20(postcss@8.4.41)

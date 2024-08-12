@@ -15,8 +15,8 @@ const switchExpandSelectLanguage = () => {
   isShowSelectPanel.value = !isShowSelectPanel.value;
 }
 
-const getText = (e: Event) => {
-  console.log((e.target as HTMLTextAreaElement).value)
+function getText(event: Event) {
+  console.log((event.target as HTMLTextAreaElement).value)
 }
 
 const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});

@@ -30,7 +30,9 @@ func TranslateText(c *gin.Context) {
 		return
 	}
 
-	err = os.WriteFile(filename, jsonData, 0644)
+	writeData := []byte(string(jsonData))
+	fmt.Printf("writeData: %v", writeData)
+	err = os.WriteFile(filename, writeData, 0644)
 	if err != nil {
 		fmt.Println("write file failed, err:", err)
 		return

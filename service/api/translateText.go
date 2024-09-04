@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 // 定义常量
@@ -49,6 +50,13 @@ func TranslateText(c *gin.Context) {
 		RequestID: "demo",
 		Detect:    true,
 	}
+	// 加载 .env 文件
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("加载 .env 文件失败", err)
+		return
+	}
+
 	apiToken := os.Getenv("API_TOKEN")
 
 	jsonData, err := json.Marshal(caiyunReq)
@@ -95,7 +103,12 @@ func TranslateText(c *gin.Context) {
 		log.Println("解析响应失败", err)
 		return
 	}
-	log.Println("解析响应成功", caiyunRes)
+
+	// 再做一层防御
+	if len(caiyunRes.Target) == 0 {
+		c.JSON(400, gin.H{"error": "翻译结果为空"})
+		return
+	}
 
 	c.JSON(200, gin.H{
 		"code": 0,

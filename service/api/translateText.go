@@ -81,7 +81,7 @@ func TranslateText(c *gin.Context) {
 	client := &http.Client{}
 	res, err := client.Do(httpReq)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.JSON(404, gin.H{"error": err.Error()})
 		log.Println("发送HTTP请求失败", err)
 		return
 	}
@@ -91,7 +91,7 @@ func TranslateText(c *gin.Context) {
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
-		log.Println("读取响应失败", err)
+		log.Println("IO读取响应失败", err)
 		return
 	}
 

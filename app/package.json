@@ -14,9 +14,9 @@
   "dependencies": {
     "@nuxt/eslint": "^0.5.0",
     "lodash": "^4.17.21",
-    "nuxt": "^3.12.4",
+    "nuxt": "^3.13.1",
     "nuxtjs-naive-ui": "^1.0.2",
-    "vue": "latest"
+    "vue": "3.5.1"
   },
   "devDependencies": {
     "@nuxt/test-utils": "^3.14.0",

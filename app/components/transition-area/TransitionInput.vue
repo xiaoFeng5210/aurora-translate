@@ -16,11 +16,10 @@ const switchExpandSelectLanguage = () => {
 }
 
 function getText(event: Event) {
-  console.log((event.target as HTMLTextAreaElement).value)
+  console.log((event.target as HTMLTextAreaElement).value);
 }
 
 const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});
-
 
 </script>
 

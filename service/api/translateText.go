@@ -3,8 +3,8 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 
@@ -35,83 +35,101 @@ type CaiyunResponse struct {
 	Target []string `json:"target"`
 }
 
+// 新增：初始化函数，用于加载环境变量
+func init() {
+	if err := godotenv.Load(); err != nil {
+		fmt.Println("警告：加载 .env 文件失败，将使用系统环境变量")
+	}
+}
+
 func TranslateText(c *gin.Context) {
 	var req TranslationRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的请求数据"})
 		return
 	}
 
-	// 准备发送给彩云API的请求
 	caiyunReq := CaiyunRequest{
 		Source:    req.Source,
 		TransType: req.Direction,
 		RequestID: "demo",
 		Detect:    true,
 	}
-	// 加载 .env 文件
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("加载 .env 文件失败", err)
-		return
-	}
 
 	apiToken := os.Getenv("API_TOKEN")
-
-	jsonData, err := json.Marshal(caiyunReq)
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+	if apiToken == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "API token 未设置"})
 		return
 	}
 
-	// 创建一个HTTP请求
-	httpReq, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(jsonData))
+	caiyunRes, err := sendCaiyunRequest(caiyunReq, apiToken)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		log.Println("创建HTTP请求失败", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	log.Printf("token: %s", apiToken)
-
-	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set("X-Authorization", "token "+apiToken)
-
-	client := &http.Client{}
-	res, err := client.Do(httpReq)
-	if err != nil {
-		c.JSON(404, gin.H{"error": err.Error()})
-		log.Println("发送HTTP请求失败", err)
-		return
-	}
-
-	defer res.Body.Close()
-
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		log.Println("IO读取响应失败", err)
-		return
-	}
-
-	var caiyunRes CaiyunResponse
-	log.Println("响应内容", string(body))
-	err = json.Unmarshal(body, &caiyunRes)
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		log.Println("解析响应失败", err)
-		return
-	}
-
-	// 再做一层防御
 	if len(caiyunRes.Target) == 0 {
-		c.JSON(400, gin.H{"error": "翻译结果为空"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "翻译结果为空"})
 		return
 	}
 
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"data": caiyunRes.Target,
 	})
+}
+
+func sendCaiyunRequest(req CaiyunRequest, apiToken string) (*CaiyunResponse, error) {
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("JSON 编码失败: %w", err)
+	}
+
+	headers := map[string]string{
+		"Content-Type":    "application/json",
+		"X-Authorization": "token " + apiToken,
+	}
+
+	responseBody, err := sendHTTPRequest("POST", apiURL, jsonData, headers)
+	if err != nil {
+		return nil, err
+	}
+
+	var caiyunRes CaiyunResponse
+	if err := json.Unmarshal(responseBody, &caiyunRes); err != nil {
+		return nil, fmt.Errorf("解析响应失败: %w", err)
+	}
+
+	return &caiyunRes, nil
+}
+
+// 新增：通用 HTTP 请求函数
+func sendHTTPRequest(method, url string, body []byte, headers map[string]string) ([]byte, error) {
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, fmt.Errorf("创建 HTTP 请求失败: %w", err)
+	}
+
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("发送 HTTP 请求失败: %w", err)
+	}
+	defer resp.Body.Close()
+
+	responseBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("读取响应失败: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("HTTP 请求失败，状态码: %d，响应: %s", resp.StatusCode, string(responseBody))
+	}
+
+	return responseBody, nil
 }

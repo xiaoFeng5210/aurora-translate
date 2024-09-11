@@ -65,7 +65,7 @@ func TranslateText(c *gin.Context) {
 
 	caiyunRes, err := sendCaiyunRequest(caiyunReq, apiToken)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "彩云api翻译失败", "data": err.Error()})
 		return
 	}
 

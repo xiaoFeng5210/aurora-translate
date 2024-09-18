@@ -13,6 +13,11 @@ function getText(event: Event) {
   console.log((event.target as HTMLTextAreaElement).value);
 }
 
+function uiChangeTargetLanguage(value: any) {
+  console.log(value)
+  handleSelectLanguage()
+}
+
 const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});
 
 </script>
@@ -21,25 +26,21 @@ const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});
   <div id="translate_from_area" class="transition_input inline-flex flex-col" @mouseenter="addStyle"
        @mouseleave="clearStyle">
     <header class="w-full h-[40px] cursor-pointer inline-flex items-center">
-      <div class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded"
-           @click="switchExpandSelectLanguage">
-        <span>{{ languageSelected.text }}</span>
-        <img v-if="!isShowSelectPanel" class="w-[16px] h-[16px]"
-             src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">
-        <img v-else class="w-[16px] h-[16px]"
-             src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">
+      <div class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded">
+        <span>自动识别</span>
       </div>
-      <img class="w-[16px] h-[16px] ml-[5px]" src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png"
+      <img class="w-[16px] h-[16px] ml-[5px] mr-[5px]"
+           src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png"
            alt="">
 
       <n-dropdown
           trigger="hover"
           placement="bottom-start"
           :options="translateFromOptions"
-          @select="handleSelectLanguage"
+          @select="uiChangeTargetLanguage"
       >
         <div class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded"
-             @click="switchExpandSelectLanguage">
+             @click="uiChangeTargetLanguage">
           <span>{{ languageSelected.text }}</span>
           <img v-if="!isShowSelectPanel" class="w-[16px] h-[16px]"
                src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">

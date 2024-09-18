@@ -12,6 +12,7 @@ export const handleSelectLanguage = (key: string) => {
 export const changeTranslateFromSelect = (key: string, log?: string) => {
 	const originSelect = useTranslateFromSelect()
 	const newSelect = translateFromOptions.find(item => item.key === key)
+	console.log(newSelect)
 	if (newSelect) {
 		originSelect.value = {language: newSelect.key, text: newSelect.label}
 	}

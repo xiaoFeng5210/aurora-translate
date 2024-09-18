@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {addStyle, clearStyle, useTranslateFromSelect} from "~/composables/useTranslateFrom";
+import {addStyle, clearStyle, handleSelectLanguage, useTranslateFromSelect} from "~/composables/useTranslateFrom";
 import {debounce} from 'lodash';
 
 const languageSelected = useTranslateFromSelect();
@@ -13,9 +13,11 @@ function getText(event: Event) {
   console.log((event.target as HTMLTextAreaElement).value);
 }
 
-function uiChangeTargetLanguage(value: any) {
-  console.log(value)
-  handleSelectLanguage()
+function uiChangeTargetLanguage(language: string) {
+  switchExpandSelectLanguage()
+  handleSelectLanguage(language)
+  // TODO: 拿到语言后有很多事情可以做
+  console.log(language)
 }
 
 const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});

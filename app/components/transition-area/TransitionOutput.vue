@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import {addStyle, clearStyle, useTranslateFromSelect} from "~/composables/useTranslateFrom";
+import {
+  addStyle,
+  clearStyle,
+  handleSelectLanguage,
+  translate2Options,
+  useTranslateFromTo
+} from "~/composables/useTranslateTo";
 import {debounce} from 'lodash';
 
-const languageSelected = useTranslateFromSelect();
+const languageSelected = useTranslateFromTo();
 const isShowSelectPanel = ref(false);
 
 const switchExpandSelectLanguage = () => {
@@ -21,21 +27,21 @@ const handlerGetText = debounce(getText, 500, {leading: false, trailing: true});
   <div id="translate_from_area" class="transition_input inline-flex flex-col" @mouseenter="addStyle"
        @mouseleave="clearStyle">
     <header class="w-full h-[40px] cursor-pointer inline-flex items-center">
-      <!--      <n-dropdown-->
-      <!--          trigger="hover"-->
-      <!--          placement="bottom-start"-->
-      <!--          :options="translateFromOptions"-->
-      <!--          @select="handleSelectLanguage"-->
-      <!--      >-->
-      <div class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded"
-           @click="switchExpandSelectLanguage">
-        <span>{{ languageSelected.text }}</span>
-        <!--        <img v-if="!isShowSelectPanel" class="w-[16px] h-[16px]"-->
-        <!--             src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">-->
-        <!--        <img v-else class="w-[16px] h-[16px]"-->
-        <!--             src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">-->
-      </div>
-      <!--      </n-dropdown>-->
+      <n-dropdown
+          trigger="hover"
+          placement="bottom-start"
+          :options="translate2Options"
+          @select="handleSelectLanguage"
+      >
+        <div class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded"
+             @click="switchExpandSelectLanguage">
+          <span>{{ languageSelected.text }}</span>
+          <img v-if="!isShowSelectPanel" class="w-[16px] h-[16px]"
+               src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">
+          <img v-else class="w-[16px] h-[16px]"
+               src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">
+        </div>
+      </n-dropdown>
       <img class="w-[16px] h-[16px] ml-[5px]" src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png"
            alt="">
     </header>

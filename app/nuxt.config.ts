@@ -4,6 +4,16 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 
 export default defineNuxtConfig({
+  nitro: {
+    // 用于客户端代理
+    devProxy: {
+      '/api': {
+        target: 'http://47.100.103.149:8080/translate/text', // 这里是接口地址
+        changeOrigin: true,
+        prependPath: true,
+      },
+    },
+  },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   modules: ['nuxtjs-naive-ui'],

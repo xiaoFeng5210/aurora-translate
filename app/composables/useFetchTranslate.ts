@@ -9,9 +9,13 @@ function useFetchTranslate() {
       direction: 'auto2zh',
     }
 
-    const { data, status, error, refresh, clear } = await useFetch('/api/modules', {
-      pick: ['title'],
+    const { data, status, error, refresh, clear } = await useFetch('api/translate/text', {
+      body: data,
     })
+  }
+
+  return {
+    fetchTranslateText,
   }
 }
 

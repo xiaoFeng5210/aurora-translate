@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { debounce } from 'lodash'
+import useFetchTranslate from '~/composables/useFetchTranslate'
 import { addStyle, clearStyle, handleSelectLanguage, useTranslateFromSelect } from '~/composables/useTranslateFrom'
 
+const { fetchTranslateText } = useFetchTranslate()
 const languageSelected = useTranslateFromSelect()
 const isShowSelectPanel = ref(false)
 
@@ -10,7 +12,8 @@ function switchExpandSelectLanguage() {
 }
 
 // TODO: 拿到语言后有很多事情可以做
-function getText(event: Event) {
+async function getText(event: string) {
+  await fetchTranslateText(event)
 }
 
 function uiChangeTargetLanguage(language: string) {

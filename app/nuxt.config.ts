@@ -1,12 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ["nuxtjs-naive-ui", "@nuxt/eslint"],
+  modules: ['nuxtjs-naive-ui'],
   vite: {
     plugins: [
       AutoImport({
@@ -17,15 +17,15 @@ export default defineNuxtConfig({
               'useMessage',
               'useNotification',
               'useLoadingBar',
-              'NDropdown'
-            ]
-          }
-        ]
+              'NDropdown',
+            ],
+          },
+        ],
       }),
       Components({
-        resolvers: [NaiveUiResolver()]
-      })
-    ]
+        resolvers: [NaiveUiResolver()],
+      }),
+    ],
   },
   css: ['~/assets/css/tailwind.css', '~/assets/css/base.css'],
   postcss: {

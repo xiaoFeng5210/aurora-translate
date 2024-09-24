@@ -12,8 +12,9 @@ function switchExpandSelectLanguage() {
 }
 
 // TODO: 拿到语言后有很多事情可以做
-async function getText(event: string) {
-  await fetchTranslateText(event)
+async function getText() {
+  const $el = document.getElementById('textarea_input') as HTMLTextAreaElement
+  await fetchTranslateText($el.value)
 }
 
 function uiChangeTargetLanguage(language: string) {
@@ -38,7 +39,6 @@ const handlerGetText = debounce(getText, 500, { leading: false, trailing: true }
         src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png"
         alt=""
       >
-
       <n-dropdown
         trigger="hover"
         placement="bottom-start"
@@ -61,7 +61,7 @@ const handlerGetText = debounce(getText, 500, { leading: false, trailing: true }
         </div>
       </n-dropdown>
     </header>
-    <textarea placeholder="请输入要翻译的文字" @input="handlerGetText" />
+    <textarea id="textarea_input" placeholder="请输入要翻译的文字" @input="handlerGetText" />
   </div>
 </template>
 

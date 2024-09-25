@@ -10,6 +10,8 @@ function useFetchTranslate() {
     console.log(body)
     const res = await useFetch('api/translate/text', {
       body,
+    }).catch((err) => {
+      return Promise.reject(err)
     })
     if (res !== undefined) {
       return res.data

@@ -15,7 +15,7 @@ func InitLogger() {
 	config := zap.NewProductionConfig()
 	config.OutputPaths = []string{"logs/translate-api.log", "stdout"}
 	config.EncoderConfig.TimeKey = "timestamp"
-	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05")
 
 	var err error
 	logger, err = config.Build()

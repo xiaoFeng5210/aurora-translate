@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"go.uber.org/zap"
 )
 
 // 定义常量
@@ -43,9 +44,12 @@ func init() {
 }
 
 func TranslateText(c *gin.Context) {
+	logger := utils.GetLogger()
+	logger.Info("收到 translate/text 请求")
 	var req TranslationRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
+		logger.Error("无效的请求数据", zap.Error(err))
 		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的请求数据"})
 		return
 	}
@@ -59,17 +63,20 @@ func TranslateText(c *gin.Context) {
 
 	apiToken := os.Getenv("API_TOKEN")
 	if apiToken == "" {
+		logger.Error("API token 未设置")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "API token 未设置"})
 		return
 	}
 
 	caiyunRes, err := sendCaiyunRequest(caiyunReq, apiToken)
 	if err != nil {
+		logger.Error("彩云api翻译失败", zap.Error(err))
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "彩云api翻译失败", "data": err.Error()})
 		return
 	}
 
 	if len(caiyunRes.Target) == 0 {
+		logger.Error("翻译结果为空")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "翻译结果为空"})
 		return
 	}
@@ -81,8 +88,10 @@ func TranslateText(c *gin.Context) {
 }
 
 func sendCaiyunRequest(req CaiyunRequest, apiToken string) (*CaiyunResponse, error) {
+	logger := utils.GetLogger()
 	jsonData, err := json.Marshal(req)
 	if err != nil {
+		logger.Error("JSON 编码失败", zap.Error(err))
 		return nil, fmt.Errorf("JSON 编码失败: %w", err)
 	}
 
@@ -93,11 +102,13 @@ func sendCaiyunRequest(req CaiyunRequest, apiToken string) (*CaiyunResponse, err
 
 	responseBody, err := utils.SendHTTPRequest("POST", apiURL, jsonData, headers)
 	if err != nil {
+		logger.Error("发送彩云api请求失败", zap.Error(err))
 		return nil, err
 	}
 
 	var caiyunRes CaiyunResponse
 	if err := json.Unmarshal(responseBody, &caiyunRes); err != nil {
+		logger.Error("解析响应失败", zap.Error(err))
 		return nil, fmt.Errorf("解析响应失败: %w", err)
 	}
 	return &caiyunRes, nil

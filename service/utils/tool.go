@@ -24,7 +24,8 @@ func InitLogger() *zap.Logger {
 	// zap 的编码器配置
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.TimeKey = "timestamp"
-	encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05")
+	// 再把时间精确到毫秒
+	encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.000")
 	encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 
 	// 创建核心

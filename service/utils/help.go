@@ -70,7 +70,7 @@ func SendHTTPRequest(method, url string, body []byte, headers map[string]string)
 /**
 * 日志打印接口
  */
-func LogApiRecord(path string, method int, data interface{}) {
+func LogApiRecord(path string, method int) {
 	var methodStr string
 	if method == 0 {
 		methodStr = "收到请求"
@@ -78,5 +78,5 @@ func LogApiRecord(path string, method int, data interface{}) {
 		methodStr = "返回响应"
 	}
 	logger := GetLogger()
-	logger.Info(fmt.Sprintf("%s，路径：%s，数据：%v", methodStr, path, data))
+	logger.Info(fmt.Sprintf("%s, 路径：%s", methodStr, path))
 }

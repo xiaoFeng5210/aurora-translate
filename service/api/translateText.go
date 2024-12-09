@@ -43,9 +43,37 @@ func init() {
 	}
 }
 
+func sendCaiyunRequest(req CaiyunRequest, apiToken string) (*CaiyunResponse, error) {
+	logger := utils.GetLogger()
+	jsonData, err := json.Marshal(req)
+	if err != nil {
+		logger.Error("JSON 编码失败", zap.Error(err))
+		return nil, fmt.Errorf("JSON 编码失败: %w", err)
+	}
+
+	headers := map[string]string{
+		"Content-Type":    "application/json",
+		"X-Authorization": "token " + apiToken,
+	}
+
+	responseBody, err := utils.SendHTTPRequest("POST", apiURL, jsonData, headers)
+	if err != nil {
+		logger.Error("发送彩云api请求失败", zap.Error(err))
+		return nil, err
+	}
+
+	var caiyunRes CaiyunResponse
+	if err := json.Unmarshal(responseBody, &caiyunRes); err != nil {
+		logger.Error("解析响应失败", zap.Error(err))
+		return nil, fmt.Errorf("解析响应失败: %w", err)
+	}
+	return &caiyunRes, nil
+}
+
 func TranslateText(c *gin.Context) {
 	logger := utils.GetLogger()
-	utils.LogApiRecord(c.Request.URL.Path, 0, c.Request.Body)
+	// utils.LogApiRecord(c.Request.URL.Path, 0)
+	logger.Info(fmt.Sprintf("收到请求, 路径：%s", c.Request.URL.Path))
 	var req TranslationRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -80,37 +108,10 @@ func TranslateText(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "翻译结果为空"})
 		return
 	}
-
-	c.JSON(http.StatusOK, gin.H{
+	response := gin.H{
 		"code": 0,
 		"data": caiyunRes.Target,
-	})
-}
-
-func sendCaiyunRequest(req CaiyunRequest, apiToken string) (*CaiyunResponse, error) {
-	logger := utils.GetLogger()
-	jsonData, err := json.Marshal(req)
-	if err != nil {
-		logger.Error("JSON 编码失败", zap.Error(err))
-		return nil, fmt.Errorf("JSON 编码失败: %w", err)
 	}
-
-	headers := map[string]string{
-		"Content-Type":    "application/json",
-		"X-Authorization": "token " + apiToken,
-	}
-
-	responseBody, err := utils.SendHTTPRequest("POST", apiURL, jsonData, headers)
-	if err != nil {
-		logger.Error("发送彩云api请求失败", zap.Error(err))
-		return nil, err
-	}
-
-	var caiyunRes CaiyunResponse
-	if err := json.Unmarshal(responseBody, &caiyunRes); err != nil {
-		logger.Error("解析响应失败", zap.Error(err))
-		return nil, fmt.Errorf("解析响应失败: %w", err)
-	}
-	utils.LogApiRecord(apiURL, 1, caiyunRes)
-	return &caiyunRes, nil
+	logger.Info(fmt.Sprintf("返回响应, 路径：%s, 数据：%v", apiURL, response))
+	c.JSON(http.StatusOK, response)
 }

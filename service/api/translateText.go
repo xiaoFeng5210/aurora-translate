@@ -45,7 +45,7 @@ func init() {
 
 func TranslateText(c *gin.Context) {
 	logger := utils.GetLogger()
-	logger.Info("收到 translate/text 请求")
+	utils.LogApiRecord(c.Request.URL.Path, 0, c.Request.Body)
 	var req TranslationRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -111,5 +111,6 @@ func sendCaiyunRequest(req CaiyunRequest, apiToken string) (*CaiyunResponse, err
 		logger.Error("解析响应失败", zap.Error(err))
 		return nil, fmt.Errorf("解析响应失败: %w", err)
 	}
+	utils.LogApiRecord(apiURL, 1, caiyunRes)
 	return &caiyunRes, nil
 }

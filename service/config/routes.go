@@ -36,7 +36,7 @@ func Routes(r *gin.Engine) {
 			* 获取用户列表
 			* @return users 用户列表
 			 */
-			users.GET("/", api.GetUsers)
+			users.GET("/all", api.GetUsers)
 		}
 	}
 

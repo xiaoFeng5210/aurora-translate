@@ -53,11 +53,41 @@ func CreateUser(c *gin.Context) {
 	})
 }
 
+func QueryUsers(c *gin.Context) {
+	var req dto.QueryUsersRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":     -1,
+			"message":  "解析查询用户请求参数失败",
+			"errorMsg": err.Error(),
+		})
+		return
+	}
+
+	db := db.GetDB()
+
+	var users []dto.User
+
+	if req.Username != "" {
+		db.Raw("SELECT * FROM users WHERE username = ? LIMIT ? OFFSET ?", req.Username, req.PageSize, (req.Page-1)*req.PageSize).Scan(&users)
+	}
+
+}
+
 // 获取用户列表
 func GetUsers(c *gin.Context) {
 	db := db.GetDB()
 	var users []dto.User
-	db.Find(&users)
+	result := db.Raw("SELECT * FROM users").Scan(&users)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":     -1,
+			"message":  "获取用户列表时查询数据库失败",
+			"errorMsg": result.Error.Error(),
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"data": &dto.UsersResponse{

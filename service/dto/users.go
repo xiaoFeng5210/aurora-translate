@@ -25,3 +25,9 @@ type UserResponse struct {
 type UsersResponse struct {
 	Users []User `json:"users"`
 }
+
+type QueryUsersRequest struct {
+	Username string `json:"username"`
+	Page     int    `json:"page"`
+	PageSize int    `json:"page_size"`
+}

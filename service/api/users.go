@@ -44,6 +44,24 @@ func CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
-		"data": user,
+		"data": &dto.UserResponse{
+			ID:        user.ID,
+			Username:  user.Username,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
+		},
+	})
+}
+
+// 获取用户列表
+func GetUsers(c *gin.Context) {
+	db := db.GetDB()
+	var users []dto.User
+	db.Find(&users)
+	c.JSON(http.StatusOK, gin.H{
+		"code": 0,
+		"data": &dto.UsersResponse{
+			Users: users,
+		},
 	})
 }

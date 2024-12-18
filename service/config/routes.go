@@ -32,6 +32,11 @@ func Routes(r *gin.Engine) {
 			 */
 			users.POST("/", api.CreateUser)
 
+			/**
+			* 获取用户列表
+			* @return users 用户列表
+			 */
+			users.GET("/", api.GetUsers)
 		}
 	}
 

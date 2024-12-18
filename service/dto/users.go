@@ -2,6 +2,9 @@ package dto
 
 import "time"
 
+/**
+* 用户表
+ */
 type User struct {
 	ID        uint   `gorm:"primaryKey"`
 	Username  string `gorm:"unique"`

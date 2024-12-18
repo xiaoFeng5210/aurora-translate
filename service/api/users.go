@@ -69,24 +69,20 @@ func QueryUsers(c *gin.Context) {
 
 	db := db.GetDB()
 
+	model := db.Model(&dto.User{})
+
 	var users []dto.User
 
-	querySql := "SELECT * FROM users"
-	sqlParams := []interface{}{
-		req.PageSize,
-		(req.Page - 1) * req.PageSize,
+	if req.Username != "" {
+		model = model.Where("username = ?", req.Username)
 	}
 
-	if req.Username != "" {
-		querySql += " WHERE username = ?"
-		sqlParams = append(sqlParams, req.Username)
-	}
-	result := db.Raw(querySql, sqlParams...).Scan(&users)
-	if result.Error != nil {
+	err := model.Limit(req.PageSize).Offset((req.Page - 1) * req.PageSize).Find(&users).Error
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":     -1,
-			"message":  "数据库错误",
-			"errorMsg": result.Error.Error(),
+			"message":  "数据库查询错误",
+			"errorMsg": err.Error(),
 		})
 		return
 	}

@@ -94,7 +94,7 @@ func QueryUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"data": &dto.UsersResponse{
-			Users: users,
+			Users: toUsersMap(users),
 		},
 	})
 }
@@ -116,7 +116,20 @@ func GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"data": &dto.UsersResponse{
-			Users: users,
+			Users: toUsersMap(users),
 		},
 	})
+}
+
+func toUsersMap(users []dto.User) []map[string]interface{} {
+	usersData := make([]map[string]interface{}, len(users))
+	for i, user := range users {
+		usersData[i] = map[string]interface{}{
+			"id":        user.ID,
+			"username":  user.Username,
+			"createdAt": user.CreatedAt,
+			"updatedAt": user.UpdatedAt,
+		}
+	}
+	return usersData
 }

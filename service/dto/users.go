@@ -26,7 +26,7 @@ type UserResponse struct {
 }
 
 type UsersResponse struct {
-	Users []User `json:"users"`
+	Users []map[string]interface{} `json:"users"`
 }
 
 type QueryUsersRequest struct {

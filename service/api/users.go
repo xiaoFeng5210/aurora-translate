@@ -53,6 +53,9 @@ func CreateUser(c *gin.Context) {
 	})
 }
 
+/**
+* 查询用户列表
+ */
 func QueryUsers(c *gin.Context) {
 	var req dto.QueryUsersRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -82,7 +85,7 @@ func QueryUsers(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":     -1,
-			"message":  "数据库查询失败",
+			"message":  "数据库错误",
 			"errorMsg": result.Error.Error(),
 		})
 		return

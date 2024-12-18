@@ -24,6 +24,13 @@ func Routes(r *gin.Engine) {
 
 		users := v1.Group("/users")
 		{
+
+			/**
+			* 获取用户列表
+			* @return users 用户列表
+			 */
+			users.GET("/all", api.GetUsers)
+
 			/**
 			* 创建用户
 			* @param username 用户名
@@ -33,10 +40,9 @@ func Routes(r *gin.Engine) {
 			users.POST("/", api.CreateUser)
 
 			/**
-			* 获取用户列表
-			* @return users 用户列表
+			* 查询用户列表
 			 */
-			users.GET("/all", api.GetUsers)
+			users.POST("/query", api.QueryUsers)
 		}
 	}
 

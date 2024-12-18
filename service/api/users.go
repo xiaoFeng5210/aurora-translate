@@ -68,10 +68,32 @@ func QueryUsers(c *gin.Context) {
 
 	var users []dto.User
 
-	if req.Username != "" {
-		db.Raw("SELECT * FROM users WHERE username = ? LIMIT ? OFFSET ?", req.Username, req.PageSize, (req.Page-1)*req.PageSize).Scan(&users)
+	querySql := "SELECT * FROM users"
+	sqlParams := []interface{}{
+		req.PageSize,
+		(req.Page - 1) * req.PageSize,
 	}
 
+	if req.Username != "" {
+		querySql += " WHERE username = ?"
+		sqlParams = append(sqlParams, req.Username)
+	}
+	result := db.Raw(querySql, sqlParams...).Scan(&users)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":     -1,
+			"message":  "数据库查询失败",
+			"errorMsg": result.Error.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": 0,
+		"data": &dto.UsersResponse{
+			Users: users,
+		},
+	})
 }
 
 // 获取用户列表

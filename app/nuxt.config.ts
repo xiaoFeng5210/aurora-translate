@@ -4,6 +4,10 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 
 export default defineNuxtConfig({
+  app: {
+    baseURL: '.',
+  },
+  ssr: false,
   nitro: {
     // 用于客户端代理
     devProxy: {

@@ -1,5 +1,14 @@
 <script setup lang="ts">
-
+onBeforeMount(async () => {
+  const res = await $fetch('/api/ping', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    onRequest({ request, options }) {
+      console.log('request路径是:', request)
+    },
+  })
+})
 </script>
 
 <template>

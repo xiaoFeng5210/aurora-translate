@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import TransitionInput from "~/components/transition-area/TransitionInput.vue";
+import TransitionInput from '~/components/transition-area/TransitionInput.vue'
 </script>
 
 <template>
   <div class="transition_area_box flex-1">
     <TransitionInput />
-    <div class="transition_output"/>
+    <div class="transition_output" />
   </div>
 </template>
 
@@ -14,7 +14,9 @@ import TransitionInput from "~/components/transition-area/TransitionInput.vue";
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(514px, 1fr));
   gap: 12px;
-  .transition_input, .transition_output {
+
+  .transition_input,
+  .transition_output {
     width: 100%;
     height: 100%;
     background: white;

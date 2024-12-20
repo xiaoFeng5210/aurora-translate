@@ -5,7 +5,7 @@ import Components from 'unplugin-vue-components/vite'
 
 export default defineNuxtConfig({
   app: {
-    baseURL: '.',
+    baseURL: '/',
   },
   ssr: false,
   nitro: {
@@ -18,7 +18,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: '2024-04-03', e
   devtools: { enabled: true },
   modules: ['nuxtjs-naive-ui'],
   vite: {
@@ -46,6 +46,12 @@ export default defineNuxtConfig({
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
+    },
+  },
+  runtimeConfig: {
+    public: {
+
+      // apiBase: process.env.NUXT_PUBLIC_API_BASE,
     },
   },
 })

@@ -16,23 +16,28 @@ function switchExpandSelectLanguage() {
 
 async function getText() {
   const $el = document.getElementById('textarea_input') as HTMLTextAreaElement
-  if ($el.value) {
-
-  }
+  currentLanguage.value.text = $el.value ?? ''
   try {
-    const res = await fetchTranslateText($el.value)
-    if (res) {
-      emit('translate-finish', res)
-    }
+    translateSuccess(currentLanguage.value.text)
   }
   catch (err) {
     message.error(err)
   }
 }
 
-function uiChangeTargetLanguage(language: string) {
+async function uiChangeTargetLanguage(language: string) {
   switchExpandSelectLanguage()
   handleSelectLanguage(language)
+  if (currentLanguage.value.text) {
+    translateSuccess(currentLanguage.value.text)
+  }
+}
+
+async function translateSuccess(text: string) {
+  const res = await fetchTranslateText(text)
+  if (res) {
+    emit('translate-finish', res)
+  }
 }
 
 const handlerGetText = debounce(getText, 500, { leading: false, trailing: true })

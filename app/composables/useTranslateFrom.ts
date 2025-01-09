@@ -2,12 +2,12 @@ import type { SelectFrom } from '~/types/common'
 
 export const translateFromOptions = [
   {
-    key: 'zh_CN',
-    label: '简体中文',
-  },
-  {
     key: 'en',
     label: '英文',
+  },
+  {
+    key: 'zh_CN',
+    label: '简体中文',
   },
 ]
 

@@ -14,6 +14,7 @@ function switchExpandSelectLanguage() {
 // TODO: 拿到语言后有很多事情可以做
 async function getText() {
   const $el = document.getElementById('textarea_input') as HTMLTextAreaElement
+  console.log(' 拿到文本了', $el.value)
   await fetchTranslateText($el.value)
 }
 
@@ -26,38 +27,23 @@ const handlerGetText = debounce(getText, 500, { leading: false, trailing: true }
 </script>
 
 <template>
-  <div
-    id="translate_from_area" class="transition_input inline-flex flex-col" @mouseenter="addStyle"
-    @mouseleave="clearStyle"
-  >
+  <div id="translate_from_area" class="transition_input inline-flex flex-col" @mouseenter="addStyle"
+    @mouseleave="clearStyle">
     <header class="w-full h-[40px] cursor-pointer inline-flex items-center">
       <div class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded">
         <span>自动识别</span>
       </div>
-      <img
-        class="w-[16px] h-[16px] ml-[5px] mr-[5px]"
-        src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png"
-        alt=""
-      >
-      <n-dropdown
-        trigger="hover"
-        placement="bottom-start"
-        :options="translateFromOptions"
-        @select="uiChangeTargetLanguage"
-      >
-        <div
-          class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded"
-          @click="uiChangeTargetLanguage"
-        >
+      <img class="w-[16px] h-[16px] ml-[5px] mr-[5px]"
+        src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/change.png" alt="">
+      <n-dropdown trigger="hover" placement="bottom-start" :options="translateFromOptions"
+        @select="uiChangeTargetLanguage">
+        <div class="inline-flex h-[22px] px-[2px] py-[2px] cursor-pointer hover:bg-gray-100 from_language rounded"
+          @click="uiChangeTargetLanguage">
           <span>{{ languageSelected.text }}</span>
-          <img
-            v-if="!isShowSelectPanel" class="w-[16px] h-[16px]"
-            src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt=""
-          >
-          <img
-            v-else class="w-[16px] h-[16px]"
-            src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt=""
-          >
+          <img v-if="!isShowSelectPanel" class="w-[16px] h-[16px]"
+            src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">
+          <img v-else class="w-[16px] h-[16px]"
+            src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">
         </div>
       </n-dropdown>
     </header>

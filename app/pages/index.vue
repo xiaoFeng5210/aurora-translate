@@ -1,13 +1,19 @@
 <script setup lang="ts">
+import { useMessage } from 'naive-ui'
+
+const message = useMessage()
+
 onBeforeMount(async () => {
-  const res = await $fetch('/api/ping', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    onRequest({ request, options }) {
-      console.log('request路径是:', request)
-    },
-  })
+  try {
+    await $fetch('/api/ping', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  }
+  catch {
+    message.error('网络不稳定，请先检查您的网络～')
+  }
 })
 </script>
 

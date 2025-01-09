@@ -7,7 +7,6 @@ function useFetchTranslate() {
       source: [textContent],
       direction: 'auto2zh',
     }
-    console.log(body)
     const res = await useFetch('api/translate/text', {
       body,
     }).catch((err) => {

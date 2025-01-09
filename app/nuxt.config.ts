@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     // 用于客户端代理
     devProxy: {
       '/api': {
-        target: 'http://47.100.103.149:8080', // 这里是接口地址
+        target: process.env.NUXT_PUBLIC_API_BASE, // 这里是接口地址
         changeOrigin: true,
         prependPath: true,
       },

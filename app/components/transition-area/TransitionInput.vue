@@ -1,21 +1,33 @@
+<!-- eslint-disable vue/custom-event-name-casing -->
 <script setup lang="ts">
 import { debounce } from 'lodash'
 import useFetchTranslate from '~/composables/useFetchTranslate'
 import { addStyle, clearStyle, handleSelectLanguage, useTranslateFromSelect } from '~/composables/useTranslateFrom'
 
+const emit = defineEmits(['translate-finish'])
 const { fetchTranslateText } = useFetchTranslate()
 const languageSelected = useTranslateFromSelect()
+const currentLanguage = useCurrentLanguage()
 const isShowSelectPanel = ref(false)
-
+const message = useMessage()
 function switchExpandSelectLanguage() {
   isShowSelectPanel.value = !isShowSelectPanel.value
 }
 
-// TODO: 拿到语言后有很多事情可以做
 async function getText() {
   const $el = document.getElementById('textarea_input') as HTMLTextAreaElement
-  console.log(' 拿到文本了', $el.value)
-  await fetchTranslateText($el.value)
+  if ($el.value) {
+
+  }
+  try {
+    const res = await fetchTranslateText($el.value)
+    if (res) {
+      emit('translate-finish', res)
+    }
+  }
+  catch (err) {
+    message.error(err)
+  }
 }
 
 function uiChangeTargetLanguage(language: string) {

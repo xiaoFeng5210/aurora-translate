@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import TransitionInput from '~/components/transition-area/TransitionInput.vue'
+
+const translateResult = ref<string[]>([])
+
+const translateRender = computed(() => {
+  return translateResult.value.join('')
+})
 </script>
 
 <template>
   <div class="transition_area_box flex-1">
-    <TransitionInput />
-    <div class="transition_output" />
+    <TransitionInput @translate-finish="translateResult = $event" />
+    <div class="transition_output">
+      <div class="others pt-[37px]" />
+      <p class="text-[18px] font-weight-500">
+        {{ translateRender }}
+      </p>
+    </div>
   </div>
 </template>
 

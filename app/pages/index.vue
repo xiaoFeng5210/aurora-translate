@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useMessage } from 'naive-ui'
-
 const message = useMessage()
-
 onBeforeMount(async () => {
   try {
     await $fetch('/api/ping', {

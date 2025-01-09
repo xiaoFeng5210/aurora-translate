@@ -11,6 +11,12 @@ export const translateFromOptions = [
   },
 ]
 
+export function useCurrentLanguage() {
+  return useState<{ text: string }>('currentLanguage', () => ({
+    text: '',
+  }))
+}
+
 export function useTranslateFromSelect() {
   return useState<SelectFrom>('configSelect', () => ({
     language: translateFromOptions[0].key,

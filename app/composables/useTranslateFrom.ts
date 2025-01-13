@@ -3,7 +3,7 @@ import type { SelectFrom } from '~/types/common'
 export const translateFromOptions = [
   {
     key: 'en',
-    label: '英文',
+    label: 'English',
   },
   {
     key: 'zh_CN',

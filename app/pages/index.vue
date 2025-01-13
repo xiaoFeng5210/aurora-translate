@@ -16,6 +16,7 @@ onBeforeMount(async () => {
 
 <template>
   <div class="flex-1 flex flex-col">
+    <HomeActions />
     <TransitionArea />
     <div class="w-full h-[86px] mt-[10px]" />
   </div>

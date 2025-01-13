@@ -23,7 +23,7 @@ const translateRender = computed(() => {
 <style scoped lang="scss">
 .transition_area_box {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(514px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(334px, 1fr));
   gap: 12px;
 
   .transition_input,
@@ -36,6 +36,10 @@ const translateRender = computed(() => {
     padding: 15px 20px 20px;
     color: #333;
     border-radius: 5px;
+  }
+
+  @media screen and (max-width: 759px) {
+    grid-template-rows: repeat(2, minmax(48%, 1fr))
   }
 }
 </style>

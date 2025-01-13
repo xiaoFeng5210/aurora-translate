@@ -4,7 +4,10 @@ import { debounce } from 'lodash'
 import useFetchTranslate from '~/composables/useFetchTranslate'
 import { addStyle, clearStyle, handleSelectLanguage, useTranslateFromSelect } from '~/composables/useTranslateFrom'
 
-const emit = defineEmits(['translate-finish'])
+// const emit = defineEmits(['translate-finish'])
+const emit = defineEmits<{
+  'translate-finish': [res: string[]]
+}>()
 const { fetchTranslateText } = useFetchTranslate()
 const languageSelected = useTranslateFromSelect()
 const currentLanguage = useCurrentLanguage()
@@ -41,6 +44,16 @@ async function translateSuccess(text: string) {
 }
 
 const handlerGetText = debounce(getText, 500, { leading: false, trailing: true })
+const canShowDeleteButton = computed(() => {
+  return currentLanguage.value.text.length > 0
+})
+
+function clearText() {
+  currentLanguage.value.text = ''
+  const $el = document.getElementById('textarea_input') as HTMLTextAreaElement
+  $el.value = ''
+  emit('translate-finish', [])
+}
 </script>
 
 <template>
@@ -63,6 +76,11 @@ const handlerGetText = debounce(getText, 500, { leading: false, trailing: true }
             src="https://cdn-web.caiyunapp.com/lingoCloud/newVersion/img/downArrow.png" alt="">
         </div>
       </n-dropdown>
+
+      <!-- 右侧清空内容按钮 -->
+      <div v-show="canShowDeleteButton" class="w-[20px] h-[20px] ml-auto" @click="clearText">
+        <img src="/img/delete.svg" class="w-full h-full" alt="">
+      </div>
     </header>
     <textarea id="textarea_input" placeholder="请输入要翻译的文字" @input="handlerGetText" />
   </div>
@@ -82,7 +100,6 @@ const handlerGetText = debounce(getText, 500, { leading: false, trailing: true }
 
   textarea {
     min-height: 240px;
-    cursor: pointer;
     resize: none;
     width: 100%;
     height: 100%;

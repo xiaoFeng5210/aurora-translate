@@ -4,7 +4,6 @@ import { debounce } from 'lodash'
 import useFetchTranslate from '~/composables/useFetchTranslate'
 import { addStyle, clearStyle, handleSelectLanguage, useTranslateFromSelect } from '~/composables/useTranslateFrom'
 
-// const emit = defineEmits(['translate-finish'])
 const emit = defineEmits<{
   'translate-finish': [res: string[]]
   'translating': [res: boolean]

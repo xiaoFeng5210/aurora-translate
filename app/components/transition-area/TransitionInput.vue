@@ -67,8 +67,10 @@ watchEffect(() => {
 function clearText() {
   currentLanguage.value.text = ''
   const $el = document.getElementById('textarea_input') as HTMLTextAreaElement
-  $el.value = ''
-  emit('translate-finish', [])
+  if ($el) {
+    $el.value = ''
+    emit('translate-finish', [])
+  }
 }
 </script>
 

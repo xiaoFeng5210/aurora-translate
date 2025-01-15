@@ -58,6 +58,12 @@ const canShowDeleteButton = computed(() => {
   return currentLanguage.value.text.length > 0
 })
 
+watchEffect(() => {
+  if (currentLanguage.value.text === '') {
+    clearText()
+  }
+})
+
 function clearText() {
   currentLanguage.value.text = ''
   const $el = document.getElementById('textarea_input') as HTMLTextAreaElement
@@ -99,7 +105,6 @@ function clearText() {
 <style scoped lang="scss">
 .transition_input {
   width: 100%;
-  height: 100%;
   background: white;
   //border: 1px solid transparent;
   box-shadow: 0 6px 18px #41a36f0f;
@@ -108,17 +113,20 @@ function clearText() {
   border-radius: 5px;
   box-sizing: border-box;
 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   textarea {
-    min-height: 240px;
+    flex: 1;
     resize: none;
     width: 100%;
-    height: 100%;
     border: none;
     font-size: 18px !important;
     font-style: normal;
     font-weight: 500;
     line-height: 26px;
-    overflow: auto;
+    overflow-y: auto;
 
     &:focus {
       //outline: none;

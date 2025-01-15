@@ -7,6 +7,7 @@ import { addStyle, clearStyle, handleSelectLanguage, useTranslateFromSelect } fr
 // const emit = defineEmits(['translate-finish'])
 const emit = defineEmits<{
   'translate-finish': [res: string[]]
+  'translating': [res: boolean]
 }>()
 const { fetchTranslateText } = useFetchTranslate()
 const languageSelected = useTranslateFromSelect()
@@ -37,9 +38,18 @@ async function uiChangeTargetLanguage(language: string) {
 }
 
 async function translateSuccess(text: string) {
-  const res = await fetchTranslateText(text)
-  if (res) {
-    emit('translate-finish', res)
+  emit('translating', true)
+  try {
+    const res = await fetchTranslateText(text)
+    if (res) {
+      emit('translate-finish', res)
+    }
+  }
+  catch {
+
+  }
+  finally {
+    emit('translating', false)
   }
 }
 

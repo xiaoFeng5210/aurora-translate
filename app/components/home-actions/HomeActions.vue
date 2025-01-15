@@ -19,9 +19,9 @@ function test() {
 <template>
   <div class="w-full h-[62px] home_actions_box">
     <!-- TODO: 操作栏 -->
-    <button @click="test">
+    <!-- <button @click="test">
       测试
-    </button>
+    </button> -->
   </div>
 </template>
 

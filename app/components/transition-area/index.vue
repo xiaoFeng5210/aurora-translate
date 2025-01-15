@@ -6,14 +6,27 @@ const translateResult = ref<string[]>([])
 const translateRender = computed(() => {
   return translateResult.value.join('')
 })
+
+const isTranslating = ref(false)
+
+function changeTranslatingState(state: boolean) {
+  isTranslating.value = state
+}
+
+onBeforeMount(() => {
+  if (isTranslating.value) {
+    isTranslating.value = false
+  }
+})
 </script>
 
 <template>
   <div class="transition_area_box flex-1">
-    <TransitionInput @translate-finish="translateResult = $event" />
+    <TransitionInput @translate-finish="translateResult = $event" @translating="changeTranslatingState($event)" />
     <div class="transition_output">
       <div class="others pt-[37px]" />
-      <p class="text-[18px] font-weight-500">
+      <span v-show="isTranslating" class="is_translating">正在翻译ing...</span>
+      <p v-show="!isTranslating" class="text-[18px] font-weight-500">
         {{ translateRender }}
       </p>
     </div>
@@ -41,5 +54,14 @@ const translateRender = computed(() => {
   @media screen and (max-width: 759px) {
     grid-template-rows: repeat(2, minmax(48%, 1fr))
   }
+}
+
+.is_translating {
+  background: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.7;
+  font-weight: 500;
+  font-size: 18px;
 }
 </style>

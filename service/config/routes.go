@@ -22,6 +22,14 @@ func Routes(r *gin.Engine) {
 		 */
 		v1.POST("/translate/text", api.TranslateText)
 
+		/**
+		* 注册用户
+		* @param username 用户名
+		* @param password 密码
+		* @return nil
+		 */
+		v1.POST("/register", api.Register)
+
 		users := v1.Group("/users")
 		{
 
@@ -30,7 +38,6 @@ func Routes(r *gin.Engine) {
 			* @return users 用户列表
 			 */
 			users.GET("/all", api.GetUsers)
-
 			/**
 			* 创建用户
 			* @param username 用户名

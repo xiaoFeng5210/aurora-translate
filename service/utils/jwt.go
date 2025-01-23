@@ -21,12 +21,10 @@ type Claims struct {
 
 // GenerateToken 生成JWT令牌
 func GenerateToken(username string) (string, error) {
-	claims := Claims{
-		username,
-		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(tokenExpireDuration)),
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-		},
+	claims := jwt.MapClaims{
+		"username": username,
+		"exp":      time.Now().Add(tokenExpireDuration).Unix(),
+		"iat":      time.Now().Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

@@ -34,3 +34,8 @@ type QueryUsersRequest struct {
 	Page     int    `json:"page"`
 	PageSize int    `json:"page_size"`
 }
+
+type RegisterRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}

@@ -13,8 +13,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-oid="q6o::rg">
-      <body className={inter.className} data-oid="69v5dvy">
+    <html lang="en" data-oid="lgh8ejv">
+      <body className={inter.className} data-oid="1yne.ej">
         {children}
       </body>
     </html>

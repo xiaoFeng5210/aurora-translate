@@ -5,7 +5,7 @@
 /public/images/uploads
 /public/images/uploads/*
 
-/.next
+.next/*
 
 .env
 .env.local

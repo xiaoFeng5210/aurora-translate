@@ -8,6 +8,7 @@ app/dist
 
 # Node dependencies
 app/node_modules
+app-nextjs/.next
 
 # Logs
 logs

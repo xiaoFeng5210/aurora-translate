@@ -60,22 +60,19 @@ func ValidateToken(tokenString string) bool {
 // @param tokenString 原令牌字符串
 // @return string 新令牌
 // @return error 错误信息
-func RefreshToken(tokenString string) (string, error) {
-	// 解析原token
-	claims, err := ParseToken(tokenString)
-	if err != nil {
-		return "", err
-	}
+// func RefreshToken(tokenString string) (string, error) {
+// 解析原token
+// claims, err := ParseToken(tokenString)
+// if err != nil {
+// 	return "", err
+// }
 
-	// 检查是否需要刷新
-	// 如果令牌有效期小于24小时，则刷新
-	if time.Until(claims.ExpiresAt.Time) > 24*time.Hour {
-		return tokenString, nil
-	}
+// if time.Until(claims.ExpiresAt.Time) > 24*time.Hour {
+// 	return tokenString, nil
+// }
 
-	// 生成新token
-	return GenerateToken(claims)
-}
+// return GenerateToken(claims)
+// }
 
 // GetUsernameFromToken 从令牌中获取用户名
 // @param tokenString 令牌字符串

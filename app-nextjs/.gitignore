@@ -1,0 +1,7 @@
+/node_modules
+/dist
+/build
+/public/images
+/public/images/uploads
+/public/images/uploads/*
+

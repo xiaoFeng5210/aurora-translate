@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Nav } from "./components/Nav";
-import { LoginModal } from "./components/LoginModal";
 
 export default function Page() {
   const [inputText, setInputText] = useState("");

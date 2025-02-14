@@ -594,6 +594,7 @@ video {
   * {
   border-color: hsl(var(--border));
 }
+
   body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
@@ -945,6 +946,22 @@ video {
     opacity: var(--tw-exit-opacity, 1);
     transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
   }
+}
+
+input:focus {
+  outline: none;
+}
+
+textarea:focus {
+  outline: none;
+}
+
+select:focus {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
 }
 
 :root {

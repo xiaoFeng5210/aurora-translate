@@ -13,7 +13,6 @@ export function TranslateOutput() {
     if (outputText) {
       await copyClipboard(outputText);
       setShowCopySuccess(true);
-      setTimeout(() => setShowCopySuccess(false), 1000); // 2秒后隐藏提示
     }
   };
 
@@ -60,16 +59,16 @@ export function TranslateOutput() {
         <AnimatePresence>
           {showCopySuccess && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: -20 }}
-              exit={{ opacity: 0, y: -40 }}
+              initial={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 0, y: -100 }}
+              onAnimationComplete={() => setShowCopySuccess(false)}
               transition={{
-                duration: 0.5,
-                ease: "easeOut"
+                duration: 0.8,
+                ease: [0.12, 0, 0.39, 0]
               }}
-              className="absolute right-0 text-sm text-purple-600 font-medium pointer-events-none"
+              className="absolute right-4 text-sm font-medium bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 bg-clip-text text-transparent pointer-events-none select-none"
             >
-              复制成功 ✨
+              ✨ 复制成功 ✨
             </motion.div>
           )}
         </AnimatePresence>

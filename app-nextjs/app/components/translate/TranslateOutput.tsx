@@ -2,7 +2,7 @@
 
 import { useTranslateStore } from '@/app/store/translate';
 import { copyClipboard } from '@/lib/utils';
-import { motion, AnimatePresence } from "motion/react";
+import { CopySuccess } from '../common/CopySuccess';
 import { useState } from 'react';
 
 export function TranslateOutput() {
@@ -33,45 +33,37 @@ export function TranslateOutput() {
         </div>
       </div>
       <div className="flex justify-end relative" data-oid="ymg._3x">
-        <button
-          onClick={handleCopy}
-          className="px-4 py-2 text-sm text-gray-600 hover:text-purple-600 flex items-center gap-2"
-          data-oid="2r5t8y5"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            data-oid="j6j:s--"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-              data-oid="vyvk4ic"
-            />
-          </svg>
-          复制结果
-        </button>
-        <AnimatePresence>
-          {showCopySuccess && (
-            <motion.div
-              initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 0, y: -100 }}
-              onAnimationComplete={() => setShowCopySuccess(false)}
-              transition={{
-                duration: 0.8,
-                ease: [0.12, 0, 0.39, 0]
-              }}
-              className="absolute right-4 text-sm font-medium bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 bg-clip-text text-transparent pointer-events-none select-none"
+        {
+          outputText && (
+            <button
+              onClick={handleCopy}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-purple-600 flex items-center gap-2"
+              data-oid="2r5t8y5"
             >
-              ✨ 复制成功 ✨
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                data-oid="j6j:s--"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  data-oid="vyvk4ic"
+                />
+              </svg>
+              复制结果
+            </button>
+          )
+        }
+        <CopySuccess
+          show={showCopySuccess}
+          onAnimationComplete={() => setShowCopySuccess(false)}
+        />
       </div>
     </div>
   );

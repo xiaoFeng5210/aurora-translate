@@ -100,7 +100,12 @@ export function TranslateInput() {
               {!isMobile && (
                 <div className="flex items-center text-xs opacity-60 ml-2 border border-white/40 rounded px-1">
                   <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 10v4a1 1 0 001 1h12v-2l4 3-4 3v-2H4a3 3 0 01-3-3v-4h2z"
+                    />
                   </svg>
                   Enter
                 </div>

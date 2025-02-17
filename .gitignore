@@ -6,9 +6,12 @@ app/nitro
 app/cache
 app/dist
 
-# Node dependencies
-app/node_modules
+# Next.js
+app-nextjs/node_modules
+app-nextjs/next
 app-nextjs/.next
+
+
 
 # Logs
 logs

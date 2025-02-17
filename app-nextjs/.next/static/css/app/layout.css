@@ -599,6 +599,9 @@ video {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
 }
+.pointer-events-none {
+  pointer-events: none;
+}
 .fixed {
   position: fixed;
 }
@@ -622,6 +625,9 @@ video {
 }
 .top-4 {
   top: 1rem;
+}
+.right-0 {
+  right: 0px;
 }
 .z-50 {
   z-index: 50;

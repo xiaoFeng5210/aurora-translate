@@ -1,20 +1,19 @@
 'use client';
 
 import { useTranslateStore } from '@/app/store/translate';
+import { copyClipboard } from '@/lib/utils';
+import { motion, AnimatePresence } from "motion/react";
+import { useState } from 'react';
 
 export function TranslateOutput() {
   const { outputText, isLoading } = useTranslateStore();
+  const [showCopySuccess, setShowCopySuccess] = useState(false);
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     if (outputText) {
-      navigator.clipboard.writeText(outputText)
-        .then(() => {
-          alert("已复制到剪贴板");
-        })
-        .catch((err) => {
-          console.error('Failed to copy:', err);
-          alert("复制失败，请手动复制");
-        });
+      await copyClipboard(outputText);
+      setShowCopySuccess(true);
+      setTimeout(() => setShowCopySuccess(false), 1000); // 2秒后隐藏提示
     }
   };
 
@@ -34,7 +33,7 @@ export function TranslateOutput() {
           )}
         </div>
       </div>
-      <div className="flex justify-end" data-oid="ymg._3x">
+      <div className="flex justify-end relative" data-oid="ymg._3x">
         <button
           onClick={handleCopy}
           className="px-4 py-2 text-sm text-gray-600 hover:text-purple-600 flex items-center gap-2"
@@ -58,6 +57,22 @@ export function TranslateOutput() {
           </svg>
           复制结果
         </button>
+        <AnimatePresence>
+          {showCopySuccess && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: -20 }}
+              exit={{ opacity: 0, y: -40 }}
+              transition={{
+                duration: 0.5,
+                ease: "easeOut"
+              }}
+              className="absolute right-0 text-sm text-purple-600 font-medium pointer-events-none"
+            >
+              复制成功 ✨
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

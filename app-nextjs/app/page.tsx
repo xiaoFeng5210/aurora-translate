@@ -18,7 +18,7 @@ export default function Page() {
             className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600 mb-4"
             data-oid="7lrwazn"
           >
-            Aurora Translate
+            Aurora Translate!
           </h1>
           <p className="text-gray-600" data-oid="03c0caw">
             使用先进的AI技术，让您的翻译更加自然流畅

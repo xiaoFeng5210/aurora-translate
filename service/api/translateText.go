@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"translate-api/utils"
 
@@ -72,7 +73,8 @@ func sendCaiyunRequest(req CaiyunRequest, apiToken string) (*CaiyunResponse, err
 
 func TranslateText(c *gin.Context) {
 	logger := utils.GetLogger()
-	// utils.LogApiRecord(c.Request.URL.Path, 0)
+	startTime := time.Now() // 开始计时
+
 	logger.Info(fmt.Sprintf("收到请求, 路径：%s", c.Request.URL.Path))
 	var req TranslationRequest
 
@@ -108,10 +110,18 @@ func TranslateText(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "翻译结果为空"})
 		return
 	}
+
+	duration := time.Since(startTime) // 计算耗时
 	response := gin.H{
 		"code": 0,
 		"data": caiyunRes.Target,
 	}
-	logger.Info(fmt.Sprintf("返回响应, 路径：%s, 数据：%v", apiURL, response))
+
+	logger.Info(fmt.Sprintf("翻译完成, 路径：%s, 耗时：%v",
+		apiURL,
+		duration,
+		// response,
+	))
+
 	c.JSON(http.StatusOK, response)
 }

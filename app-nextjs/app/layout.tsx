@@ -1,10 +1,8 @@
-'use client';
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
-import { useEffect } from 'react';
-import { useAuthStore } from '@/app/store/auth';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,16 +14,11 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { checkAuth } = useAuthStore();
-
-  // TODO: useEffect(() => {
-  //   checkAuth();
-  // }, []);
-
   return (
-    <html lang="zh-CN" data-oid="lgh8ejv">
-      <body className={inter.className} data-oid="1yne.ej">
+    <html lang="zh-CN" data-oid="bs7bemu">
+      <body className={inter.className} data-oid=":-lo2le">
         {children}
+        <ToastContainer data-oid="hf9.jvw" />
       </body>
     </html>
   );

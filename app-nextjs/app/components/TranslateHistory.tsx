@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useTranslateStore } from '@/app/store/translate';
+import { useTranslateStore } from "@/app/store/translate";
 
 export default function TranslateHistory() {
   const { history, clearHistory } = useTranslateStore();
@@ -10,35 +10,44 @@ export default function TranslateHistory() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-8 p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">翻译历史</h2>
+    <div className="w-full max-w-4xl mx-auto mt-8 p-4" data-oid="k58__gt">
+      <div
+        className="flex justify-between items-center mb-4"
+        data-oid="q7v.k6s"
+      >
+        <h2 className="text-xl font-semibold" data-oid="09:s1d3">
+          翻译历史
+        </h2>
         <button
           onClick={clearHistory}
           className="text-red-500 hover:text-red-600"
+          data-oid="xwju3wo"
         >
           清除历史
         </button>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4" data-oid="wt58kc5">
         {history.map((entry, index) => (
           <div
             key={entry.timestamp}
             className="border rounded p-4 bg-white shadow-sm"
+            data-oid="_1qte04"
           >
-            <div className="text-sm text-gray-500 mb-2">
+            <div className="text-sm text-gray-500 mb-2" data-oid="c6_q:m3">
               {new Date(entry.timestamp).toLocaleString()}
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-sm text-gray-500">
+            <div className="grid grid-cols-2 gap-4" data-oid="sd:ve6f">
+              <div data-oid="h_1m-.0">
+                <div className="text-sm text-gray-500" data-oid="4lfn820">
                   {entry.fromLang} → {entry.toLang}
                 </div>
-                <div>{entry.sourceText}</div>
+                <div data-oid="0bpj2wl">{entry.sourceText}</div>
               </div>
-              <div>
-                <div className="text-sm text-gray-500">翻译结果</div>
-                <div>{entry.translatedText}</div>
+              <div data-oid="czvrd:q">
+                <div className="text-sm text-gray-500" data-oid="-z.4ok3">
+                  翻译结果
+                </div>
+                <div data-oid="wxaqi67">{entry.translatedText}</div>
               </div>
             </div>
           </div>
@@ -46,4 +55,4 @@ export default function TranslateHistory() {
       </div>
     </div>
   );
-} 
+}

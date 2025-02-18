@@ -10,6 +10,8 @@ import (
 	"go.uber.org/zap"
 )
 
+var testToken string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDAxMDYwNDIsImlhdCI6MTczOTg0Njg0MiwidXNlcm5hbWUiOiLlsI_puK3lrZAifQ.xj2UZ8DIYpJc8Q2gpiLW6RTZawhLAkDah_HDaIeOziI"
+
 func CheckUserExists(username string) bool {
 	var user dto.User
 	db := db.GetDB()

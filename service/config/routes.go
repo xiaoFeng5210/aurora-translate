@@ -30,6 +30,8 @@ func Routes(r *gin.Engine) {
 		 */
 		v1.POST("/register", api.Register)
 
+		v1.POST("/login", api.Login)
+
 		users := v1.Group("/users")
 		{
 

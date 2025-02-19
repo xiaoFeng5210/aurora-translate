@@ -56,11 +56,11 @@ func Routes(r *gin.Engine) {
 	}
 
 	{
-		collection := v1.Group("/collection")
+		collection := v1.Group("/collections")
 		{
 			collection.GET("/", api.GetCollections)
+			collection.POST("/add", api.AddCollection)
 		}
 	}
-
 
 }

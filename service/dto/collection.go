@@ -21,6 +21,7 @@ type Collection struct {
 
 // CollectionRequest 创建收藏的请求结构
 type CollectionRequest struct {
+	Username   string `json:"username" binding:"required"`
 	SourceText string `json:"sourceText" binding:"required"`
 	TargetText string `json:"targetText" binding:"required"`
 	SourceLang string `json:"sourceLang" binding:"required"`

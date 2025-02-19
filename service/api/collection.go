@@ -13,12 +13,12 @@ import (
 
 // CollectionQuery 查询参数结构
 type CollectionQuery struct {
-	PageSize   int    `json:"pageSize"`   // 每页数量
-	PageNumber int    `json:"pageNumber"` // 页码
-	Username   string `json:"username"`   // 用户名
-	Keyword    string `json:"keyword"`    // 搜索关键词(匹配原文和译文)
-	SourceLang string `json:"sourceLang"` // 源语言
-	TargetLang string `json:"targetLang"` // 目标语言
+	PageSize   int    `form:"pageSize,default=10"`         // 每页数量，默认10
+	PageNumber int    `form:"pageNumber,default=1"`        // 页码，默认1
+	Username   string `form:"username" binding:"required"` // 用户名必填
+	Keyword    string `form:"keyword,default=''" `         // 搜索关键词(可选)
+	SourceLang string `form:"sourceLang,default='auto'"`   // 源语言(可选)
+	TargetLang string `form:"targetLang,default='auto'"`   // 目标语言(可选)
 }
 
 // GetCollections 获取收藏列表
@@ -26,33 +26,25 @@ func GetCollections(c *gin.Context) {
 	logger := utils.GetLogger()
 	var query CollectionQuery
 
-	// 解析 JSON 查询参数
-	if err := c.ShouldBindJSON(&query); err != nil {
+	// 解析 URL 查询参数
+	if err := c.ShouldBindQuery(&query); err != nil {
 		logger.Error("解析查询参数失败", zap.Error(err))
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":     -1004,
-			"message":  "解析查询参数失败",
+			"message":  "用户名是必填参数",
 			"errorMsg": err.Error(),
 		})
 		return
-	}
-
-	// 设置默认分页参数
-	if query.PageSize <= 0 {
-		query.PageSize = 10
-	}
-	if query.PageNumber <= 0 {
-		query.PageNumber = 1
 	}
 
 	// 构建查询
 	db := db.GetDB()
 	baseQuery := db.Model(&dto.Collection{})
 
-	// 添加查询条件
-	if query.Username != "" {
-		baseQuery = baseQuery.Where("username = ?", query.Username)
-	}
+	// username 是必填的，直接使用
+	baseQuery = baseQuery.Where("username = ?", query.Username)
+
+	// 其他可选条件
 	if query.Keyword != "" {
 		keyword := "%" + query.Keyword + "%"
 		baseQuery = baseQuery.Where(
@@ -108,14 +100,23 @@ func GetCollections(c *gin.Context) {
 		})
 	}
 
+	if len(response) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 0,
+			"data": gin.H{
+				"total": total,
+				"list":  []dto.CollectionResponse{},
+			},
+		})
+		return
+	}
+
 	// 返回结果
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"data": gin.H{
-			"total":      total,
-			"list":       response,
-			"pageSize":   query.PageSize,
-			"pageNumber": query.PageNumber,
+			"total": total,
+			"list":  response,
 		},
 	})
 }
@@ -194,8 +195,7 @@ func AddCollection(c *gin.Context) {
 	// 返回成功
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
-		"data": dto.CollectionResponse{
-			ID:         collection.ID,
+		"data": &dto.CollectionResponse{
 			SourceText: collection.SourceText,
 			TargetText: collection.TargetText,
 			SourceLang: collection.SourceLang,

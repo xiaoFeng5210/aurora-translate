@@ -4,6 +4,8 @@ import (
 	"os"
 	"time"
 
+	"strconv"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -48,4 +50,16 @@ func GetLogger() *zap.Logger {
 		logger = InitLogger()
 	}
 	return logger
+}
+
+func IsNumberic(s string) bool {
+	// 尝试整数转换
+	_, intErr := strconv.Atoi(s)
+	if intErr == nil {
+		return true
+	}
+
+	// 尝试浮点数转换
+	_, floatErr := strconv.ParseFloat(s, 64)
+	return floatErr == nil
 }

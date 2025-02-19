@@ -55,4 +55,12 @@ func Routes(r *gin.Engine) {
 		}
 	}
 
+	{
+		collection := v1.Group("/collection")
+		{
+			collection.GET("/", api.GetCollections)
+		}
+	}
+
+
 }

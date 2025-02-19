@@ -26,7 +26,7 @@ func DBConnect() (*gorm.DB, error) {
 	logger.Info("连接数据库成功")
 
 	// 这一步很关键，和数据库表进行同步
-	err = db.AutoMigrate(&dto.User{})
+	err = db.AutoMigrate(&dto.User{}, &dto.Collection{})
 	if err != nil {
 		logger.Error("auto migrate失败！", zap.Error(err))
 		return nil, err

@@ -13,12 +13,11 @@ import (
 
 // CollectionQuery 查询参数结构
 type CollectionQuery struct {
-	PageSize   int    `form:"pageSize,default=10"`         // 每页数量，默认10
-	PageNumber int    `form:"pageNumber,default=1"`        // 页码，默认1
-	Username   string `form:"username" binding:"required"` // 用户名必填
-	Keyword    string `form:"keyword,default=''" `         // 搜索关键词(可选)
-	SourceLang string `form:"sourceLang,default='auto'"`   // 源语言(可选)
-	TargetLang string `form:"targetLang,default='auto'"`   // 目标语言(可选)
+	PageSize   int    `form:"pageSize,default=10"`  // 每页数量，默认10
+	PageNumber int    `form:"pageNumber,default=1"` // 页码，默认0
+	Keyword    string `form:"keyword" `             // 搜索关键词(可选)
+	SourceLang string `form:"sourceLang" `          // 源语言(可选)
+	TargetLang string `form:"targetLang" `          // 目标语言(可选)
 }
 
 // GetCollections 获取收藏列表
@@ -37,12 +36,12 @@ func GetCollections(c *gin.Context) {
 		return
 	}
 
+	// 直接获取中间件设置的 username
+	username := c.GetString("username")
+
 	// 构建查询
 	db := db.GetDB()
-	baseQuery := db.Model(&dto.Collection{})
-
-	// username 是必填的，直接使用
-	baseQuery = baseQuery.Where("username = ?", query.Username)
+	baseQuery := db.Model(&dto.Collection{}).Where("username = ?", username)
 
 	// 其他可选条件
 	if query.Keyword != "" {
@@ -77,7 +76,6 @@ func GetCollections(c *gin.Context) {
 	if err := baseQuery.
 		Offset(offset).
 		Limit(query.PageSize).
-		Order("created_at DESC").
 		Find(&collections).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":     -1005,
@@ -137,19 +135,12 @@ func AddCollection(c *gin.Context) {
 		return
 	}
 
-	// 获取当前登录用户
-	username, exists := c.Get("username")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"code":    -1001,
-			"message": "请先登录",
-		})
-		return
-	}
+	// 直接获取中间件设置的 username
+	username := c.GetString("username")
 
-	// 创建收藏记录
+	// 使用 username 创建收藏记录
 	collection := dto.Collection{
-		Username:   username.(string),
+		Username:   username,
 		SourceText: req.SourceText,
 		TargetText: req.TargetText,
 		SourceLang: req.SourceLang,

@@ -9,11 +9,11 @@ type Collection struct {
 	ID       uint   `gorm:"primaryKey"`
 	Username string `gorm:"not null;index"`
 
-	SourceText string `gorm:"type:text;not null"`
-	TargetText string `gorm:"type:text;not null"`
+	SourceText string
+	TargetText string
 
-	SourceLang string `gorm:"size:10;not null"`
-	TargetLang string `gorm:"size:10;not null"`
+	SourceLang string
+	TargetLang string
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -21,7 +21,6 @@ type Collection struct {
 
 // CollectionRequest 创建收藏的请求结构
 type CollectionRequest struct {
-	Username   string `json:"username" binding:"required"`
 	SourceText string `json:"sourceText" binding:"required"`
 	TargetText string `json:"targetText" binding:"required"`
 	SourceLang string `json:"sourceLang" binding:"required"`

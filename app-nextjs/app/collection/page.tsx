@@ -1,52 +1,81 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Nav } from "../components/Nav";
-
-// 模拟的收藏数据
-const mockCollections = [
-  {
-    id: 1,
-    originalText: "The early bird catches the worm",
-    translatedText: "早起的鸟儿有虫吃",
-    fromLanguage: "en",
-    toLanguage: "zh",
-    timestamp: "2024-03-15",
-  },
-  {
-    id: 2,
-    originalText: "人生就像一盒巧克力，你永远不知道下一颗是什么味道",
-    translatedText:
-      "Life is like a box of chocolates, you never know what you're gonna get",
-    fromLanguage: "zh",
-    toLanguage: "en",
-    timestamp: "2024-03-14",
-  },
-  {
-    id: 3,
-    originalText: "Time is money",
-    translatedText: "时间就是金钱",
-    fromLanguage: "en",
-    toLanguage: "zh",
-    timestamp: "2024-03-13",
-  },
-  {
-    id: 4,
-    originalText: "春眠不觉晓，处处闻啼鸟",
-    translatedText:
-      "Spring sleep does not know dawn, everywhere hear birds chirping",
-    fromLanguage: "zh",
-    toLanguage: "en",
-    timestamp: "2024-03-12",
-  },
-];
+import { collectionApi, CollectionItem } from "../../api/collectionApi";
+import { showToast } from "../components/common/Toast";
 
 export default function CollectionPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [collections, setCollections] = useState<CollectionItem[]>([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 10,
+    total: 0
+  });
+  const [loading, setLoading] = useState(false);
 
-  const filteredCollections = mockCollections.filter(
-    (item) =>
-      item.originalText.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.translatedText.toLowerCase().includes(searchQuery.toLowerCase()),
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        setLoading(true);
+        const response = await collectionApi.getCollections({
+          pageNumber: pagination.page,
+          pageSize: pagination.pageSize,
+          keyword: searchQuery
+        });
+
+        setCollections(response.data.list);
+        setPagination({
+          ...pagination,
+          total: response.data.total
+        });
+      } catch (error) {
+        showToast.error("获取收藏失败");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCollections();
+  }, [pagination.page, searchQuery]);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await collectionApi.deleteCollection(id);
+      setCollections(prev => prev.filter(item => item.id !== id));
+      showToast.success("删除成功");
+      setPagination(prev => ({ ...prev, total: prev.total - 1 }));
+    } catch (error) {
+      showToast.error("删除失败");
+    }
+  };
+
+  const filteredCollections = collections.filter(
+    (item: CollectionItem) =>
+      item.sourceText.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.targetText.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const Pagination = () => (
+    <div className="flex justify-center mt-4">
+      <button
+        disabled={pagination.page === 1 || loading}
+        onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+        className="px-4 py-2 mx-1 rounded-lg bg-white border border-gray-200 disabled:opacity-50"
+      >
+        上一页
+      </button>
+      <span className="px-4 py-2">
+        第 {pagination.page} 页 / 共 {Math.ceil(pagination.total / pagination.pageSize)} 页
+      </span>
+      <button
+        disabled={(pagination.page * pagination.pageSize) >= pagination.total || loading}
+        onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+        className="px-4 py-2 mx-1 rounded-lg bg-white border border-gray-200 disabled:opacity-50"
+      >
+        下一页
+      </button>
+    </div>
   );
 
   return (
@@ -110,7 +139,11 @@ export default function CollectionPage() {
             className="h-[calc(100vh-280px)] overflow-y-auto"
             data-oid="h4s2ehn"
           >
-            {filteredCollections.length === 0 ? (
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin h-8 w-8 border-4 border-purple-500 rounded-full border-t-transparent mx-auto"></div>
+              </div>
+            ) : collections.length === 0 ? (
               <div
                 className="text-center py-12 text-gray-500"
                 data-oid="doo-ip-"
@@ -119,7 +152,7 @@ export default function CollectionPage() {
               </div>
             ) : (
               <div className="space-y-4" data-oid="y1dm.0v">
-                {filteredCollections.map((item) => (
+                {collections.map((item) => (
                   <div
                     key={item.id}
                     className="p-4 border border-gray-100 rounded-xl hover:border-purple-200 transition-all hover:shadow-sm"
@@ -140,14 +173,14 @@ export default function CollectionPage() {
                             className="text-xs px-2 py-1 bg-gray-100 rounded-full"
                             data-oid="c:1xfri"
                           >
-                            {item.fromLanguage}
+                            {item.sourceLang}
                           </span>
                         </div>
                         <div
                           className="text-gray-800 min-h-[60px]"
                           data-oid="jwd59k7"
                         >
-                          {item.originalText}
+                          {item.sourceText}
                         </div>
                       </div>
                       {/* 译文 */}
@@ -161,14 +194,14 @@ export default function CollectionPage() {
                             className="text-xs px-2 py-1 bg-gray-100 rounded-full"
                             data-oid="4w:bm1b"
                           >
-                            {item.toLanguage}
+                            {item.targetLang}
                           </span>
                         </div>
                         <div
                           className="text-gray-800 min-h-[60px]"
                           data-oid="tg4g1k9"
                         >
-                          {item.translatedText}
+                          {item.targetText}
                         </div>
                       </div>
                     </div>
@@ -178,7 +211,7 @@ export default function CollectionPage() {
                       data-oid="s8_haib"
                     >
                       <div className="text-gray-500" data-oid="6zd6lu:">
-                        {item.timestamp}
+                        {new Date(item.createdAt).toLocaleDateString()}
                       </div>
                       <div
                         className="flex items-center gap-3"
@@ -206,6 +239,7 @@ export default function CollectionPage() {
                           </svg>
                         </button>
                         <button
+                          onClick={() => handleDelete(item.id)}
                           className="text-gray-400 hover:text-red-500 p-1"
                           data-oid="185g-xi"
                         >
@@ -235,6 +269,7 @@ export default function CollectionPage() {
           </div>
         </div>
       </div>
+      <Pagination />
     </div>
   );
 }

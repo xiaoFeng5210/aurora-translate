@@ -2,6 +2,7 @@ package config
 
 import (
 	"translate-api/api"
+	"translate-api/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -55,12 +56,24 @@ func Routes(r *gin.Engine) {
 		}
 	}
 
+	// 需要认证的路由组
+	authGroup := r.Group("/")
+
+	authGroup.Use(middleware.JWT())
 	{
-		collection := v1.Group("/collections")
-		{
-			collection.GET("/", api.GetCollections)
-			collection.POST("/add", api.AddCollection)
-		}
+		/**
+		* 获取收藏列表
+		* @return collections 收藏列表
+		 */
+		authGroup.GET("/api/v1/collections", api.GetCollections)
+
+		/**
+		* 添加收藏
+		* @param source_text 源文本
+		* @param target_text 目标文本
+		* @return nil
+		 */
+		authGroup.POST("/api/v1/collections/add", api.AddCollection)
 	}
 
 }

@@ -1,48 +1,46 @@
 "use client";
 
+import Link from "next/link";
+import { useAuthStore } from "@/app/store/auth";
 import { useState } from "react";
 import { LoginModal } from "./LoginModal";
+
 export function Nav() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, userInfo, logout } = useAuthStore();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+  };
 
   return (
-    <nav className="bg-white shadow-md" data-oid="nfipnkb">
-      <div className="max-w-7xl mx-auto px-4" data-oid="5oofm:l">
-        <div
-          className="flex justify-between items-center h-16"
-          data-oid="mrb5zsj"
-        >
-          <div className="flex items-center" data-oid="4fqhkty">
-            <a
+    <nav className="bg-white shadow-sm" data-oid="iqxvxqw">
+      <div className="max-w-6xl mx-auto px-4" data-oid="iqxvxqw">
+        <div className="flex justify-between h-16" data-oid="iqxvxqw">
+          <div className="flex items-center" data-oid="iqxvxqw">
+            <Link
               href="/"
               className="text-xl font-bold text-purple-600"
-              data-oid="5xum:ba"
+              data-oid="iqxvxqw"
             >
-              Aurora
-            </a>
-            <div className="ml-10 flex space-x-4" data-oid="ve:f-_m">
-              <a
-                href="/"
-                className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md"
-                data-oid="zd0v4ab"
-              >
-                首页
-              </a>
-              <a
-                href="/collection"
-                className="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md"
-                data-oid="-llbvmv"
-              >
-                收藏夹
-              </a>
-            </div>
+              Aurora Translate
+            </Link>
           </div>
-          <div className="flex items-center" data-oid="n3vq9p3">
-            {isLoggedIn ? (
-              <div className="flex items-center" data-oid="ldkgry2">
+
+          <div className="flex items-center" data-oid="iqxvxqw">
+            {isAuthenticated ? (
+              <div className="flex items-center relative" data-oid="ldkgry2">
+                <Link
+                  href="/collection"
+                  className="mr-4 text-gray-600 hover:text-purple-600"
+                >
+                  我的收藏
+                </Link>
                 <button
-                  className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center"
+                  className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center relative"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
                   data-oid="84z1r9x"
                 >
                   <svg
@@ -60,6 +58,20 @@ export function Nav() {
                     />
                   </svg>
                 </button>
+                {/* 用户菜单 */}
+                {showUserMenu && (
+                  <div className="absolute right-0 top-10 w-48 py-2 bg-white rounded-lg shadow-xl border border-gray-100">
+                    <div className="px-4 py-2 text-sm text-gray-500 border-b border-gray-100">
+                      {userInfo?.username}
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      退出登录
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex space-x-4" data-oid="egm.3vs">
@@ -72,6 +84,7 @@ export function Nav() {
                 </button>
                 <button
                   className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+                  onClick={() => setIsLoginModalOpen(true)}
                   data-oid="6jvxofe"
                 >
                   注册
@@ -81,12 +94,9 @@ export function Nav() {
           </div>
         </div>
       </div>
-
-      {/* 测试 */}
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-        data-oid="1u79lz0"
       />
     </nav>
   );

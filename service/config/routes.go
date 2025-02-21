@@ -75,5 +75,4 @@ func Routes(r *gin.Engine) {
 		 */
 		authGroup.POST("/api/v1/collections/add", api.AddCollection)
 	}
-
 }

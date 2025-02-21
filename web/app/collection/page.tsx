@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Nav } from "../components/Nav";
 import { collectionApi, CollectionItem } from "../../api/collectionApi";
 import { showToast } from "../components/common/Toast";
+import { ConfirmDialog } from "../components/common/ConfirmDialog";
 
 export default function CollectionPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,6 +14,13 @@ export default function CollectionPage() {
     total: 0
   });
   const [loading, setLoading] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    isOpen: boolean;
+    itemId: number | null;
+  }>({
+    isOpen: false,
+    itemId: null,
+  });
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -23,6 +31,7 @@ export default function CollectionPage() {
           pageSize: pagination.pageSize,
           keyword: searchQuery
         });
+        console.log(response.data.list);
         setCollections(response.data.list);
         setPagination({
           ...pagination,
@@ -238,7 +247,7 @@ export default function CollectionPage() {
                           </svg>
                         </button>
                         <button
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => setDeleteConfirm({ isOpen: true, itemId: item.id })}
                           className="text-gray-400 hover:text-red-500 p-1"
                           data-oid="185g-xi"
                         >
@@ -269,6 +278,17 @@ export default function CollectionPage() {
         </div>
       </div>
       <Pagination />
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false, itemId: null })}
+        onConfirm={async () => {
+          if (deleteConfirm.itemId) {
+            await handleDelete(deleteConfirm.itemId);
+          }
+        }}
+        title="确认删除"
+        message="确定要删除这条收藏吗？此操作无法撤销。"
+      />
     </div>
   );
 }

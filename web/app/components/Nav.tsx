@@ -11,7 +11,6 @@ export function Nav() {
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   useEffect(() => {
-    console.log('checkAuth');
     checkAuth();
   }, [])
 

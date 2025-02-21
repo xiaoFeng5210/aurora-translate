@@ -76,6 +76,7 @@ func GetCollections(c *gin.Context) {
 	if err := baseQuery.
 		Offset(offset).
 		Limit(query.PageSize).
+		Order("created_at DESC").
 		Find(&collections).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":     -1005,
@@ -193,5 +194,32 @@ func AddCollection(c *gin.Context) {
 			TargetLang: collection.TargetLang,
 			CreatedAt:  collection.CreatedAt,
 		},
+	})
+}
+
+func DeleteCollectionItem(c *gin.Context) {
+	// 拿到ID
+	id := c.Param("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    -1004,
+			"message": "请求参数没有id",
+		})
+		return
+	}
+
+	username := c.GetString("username")
+	db := db.GetDB()
+	if err := db.Where("username = ? AND id = ?", username, id).Delete(&dto.Collection{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":     -1005,
+			"message":  "数据库删除收藏记录失败",
+			"errorMsg": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"message": "删除收藏记录成功",
 	})
 }

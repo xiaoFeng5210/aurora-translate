@@ -36,3 +36,7 @@ type CollectionResponse struct {
 	TargetLang string    `json:"targetLang"`
 	CreatedAt  time.Time `json:"createdAt"`
 }
+
+type DeleteCollectionItemRequest struct {
+	ID uint `json:"id" binding:"required"`
+}

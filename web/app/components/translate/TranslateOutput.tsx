@@ -9,7 +9,7 @@ import { collectionApi } from "../../../api/collectionApi";
 import { showToast } from "../common/Toast";
 
 export function TranslateOutput() {
-  const { outputText, isLoading } = useTranslateStore();
+  const { outputText, isLoading, isTranslateSuccess } = useTranslateStore();
   const { isAuthenticated } = useAuthStore();
   const [showCopySuccess, setShowCopySuccess] = useState(false);
   const [isCollecting, setIsCollecting] = useState(false);
@@ -49,6 +49,21 @@ export function TranslateOutput() {
     }
   };
 
+  const renderOutputText = () => {
+    if (outputText) {
+      if (isTranslateSuccess) {
+        return outputText;
+      } else {
+        return (
+          <span className="text-red-500" data-oid="v7t2tak">
+            {outputText}
+          </span>
+        )
+      }
+    }
+    else return ''
+  }
+
   return (
     <div className="bg-white rounded-2xl shadow-xl p-6" data-oid="9:gw.xq">
       <div className="mb-4" data-oid="4vtw.6a">
@@ -70,7 +85,7 @@ export function TranslateOutput() {
               AI模型正在翻译中ing...
             </span>
           ) : (
-            outputText || (
+            renderOutputText() || (
               <span className="text-gray-400" data-oid="v7t2tak">
                 翻译结果将在这里显示...
               </span>

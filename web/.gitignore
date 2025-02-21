@@ -5,6 +5,8 @@
 .next/cache/*
 .next/logs/*
 
+/out
+
 
 /node_modules
 

@@ -6,6 +6,7 @@ interface TranslateState {
   outputText: string;
   selectedLanguage: string;
   isLoading: boolean;
+  isTranslateSuccess: boolean;
   history: Array<{
     sourceText: string;
     translatedText: string;
@@ -27,6 +28,7 @@ export const useTranslateStore = create<TranslateState>((set, get) => ({
   selectedLanguage: 'en',
   isLoading: false,
   history: [],
+  isTranslateSuccess: false,
 
   setInputText: (text) => set({ inputText: text }),
   setOutputText: (text) => set({ outputText: text }),
@@ -44,7 +46,7 @@ export const useTranslateStore = create<TranslateState>((set, get) => ({
         toLang: selectedLanguage,
       });
 
-      set({ outputText: result.translatedText });
+      set({ outputText: result.translatedText, isTranslateSuccess: true });
 
       get().addToHistory({
         sourceText: inputText,
@@ -53,8 +55,7 @@ export const useTranslateStore = create<TranslateState>((set, get) => ({
         toLang: selectedLanguage,
       });
     } catch (error) {
-      console.error('Translation failed:', error);
-      set({ outputText: "翻译失败，请稍后重试" });
+      set({ outputText: "翻译失败，请稍后重试", isTranslateSuccess: false });
     } finally {
       set({ isLoading: false });
     }

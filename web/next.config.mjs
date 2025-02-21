@@ -1,7 +1,7 @@
 import path from 'path';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'standalong',
+    output: 'standalone',
     async rewrites() {
         return [
             {

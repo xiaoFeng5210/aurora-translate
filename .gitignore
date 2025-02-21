@@ -7,9 +7,6 @@ app/cache
 app/dist
 
 # Next.js
-app-nextjs/node_modules
-app-nextjs/next
-app-nextjs/.next
 
 
 
@@ -23,9 +20,10 @@ logs
 .idea
 
 # Local env files
-app/.env
-app/.env.*
-app/.env.example
+web/.env
+web/.env.*
+web/.env.example
+web/.next
 
 
 

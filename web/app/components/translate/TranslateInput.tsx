@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslateStore } from "@/app/store/translate";
+import { useTranslateStore, MAX_INPUT_LENGTH } from "@/app/store/translate";
 import { useDevice } from "@/app/hooks/useDevice";
 import { motion } from "motion/react";
 
@@ -76,14 +76,22 @@ export function TranslateInput() {
             </button>
           )}
         </div>
-        <textarea
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          onKeyPress={handleKeyPress}
-          className="w-full h-48 p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-          placeholder="请输入需要翻译的文字..."
-          data-oid="d9s4ecq"
-        />
+        <div className="relative">
+          <textarea
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            className="w-full h-48 p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+            placeholder="请输入需要翻译的文字..."
+            data-oid="d9s4ecq"
+          />
+          <div
+            className={`absolute bottom-2 right-2 text-sm ${inputText.length >= MAX_INPUT_LENGTH ? 'text-red-500' : 'text-gray-400'
+              }`}
+          >
+            {inputText.length}/{MAX_INPUT_LENGTH}
+          </div>
+        </div>
       </div>
       <div
         className="flex justify-between items-center flex-row"

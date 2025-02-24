@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { translateApi } from '@/api/translateApi';
 
+// 添加最大字数常量
+const MAX_INPUT_LENGTH = 1000;
+
 interface TranslateState {
   inputText: string;
   outputText: string;
@@ -30,7 +33,11 @@ export const useTranslateStore = create<TranslateState>((set, get) => ({
   history: [],
   isTranslateSuccess: false,
 
-  setInputText: (text) => set({ inputText: text }),
+  setInputText: (text) => {
+    // 如果输入文本超过最大长度，截取前 MAX_INPUT_LENGTH 个字符
+    const truncatedText = text.slice(0, MAX_INPUT_LENGTH);
+    set({ inputText: truncatedText });
+  },
   setOutputText: (text) => set({ outputText: text }),
   setSelectedLanguage: (lang) => set({ selectedLanguage: lang }),
 
@@ -73,4 +80,7 @@ export const useTranslateStore = create<TranslateState>((set, get) => ({
     })),
 
   clearHistory: () => set({ history: [] }),
-})); 
+}));
+
+// 导出最大字数常量供其他组件使用
+export { MAX_INPUT_LENGTH }; 

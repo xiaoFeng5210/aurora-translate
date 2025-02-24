@@ -144,11 +144,11 @@ export default function CollectionPage() {
 
         {/* 收藏列表容器 */}
         <div
-          className="bg-white rounded-2xl shadow-xl p-4 md:p-6"
+          className="bg-white rounded-2xl shadow-xl p-6 md:p-6"
           data-oid="l-p0qz4"
         >
           <div
-            className="h-[calc(100vh-280px)] overflow-y-auto"
+            className="h-[47vh] min-h-[100px] w-full overflow-y-auto"
             data-oid="h4s2ehn"
           >
             {loading ? (

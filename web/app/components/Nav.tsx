@@ -2,22 +2,39 @@
 
 import Link from "next/link";
 import { useAuthStore } from "@/app/store/auth";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { LoginModal } from "./LoginModal";
 
 export function Nav() {
   const { isAuthenticated, userInfo, checkAuth, logout } = useAuthStore();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const ele = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     checkAuth();
   }, [])
 
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    }
+  }, [showUserMenu])
+
   const handleLogout = () => {
     logout();
     setShowUserMenu(false);
   };
+
+  function handleClickOutside(evt: MouseEvent) {
+    if (showUserMenu) {
+      const isClickedOutside = !ele.current?.contains(evt.target as Node);
+      if (isClickedOutside) {
+        setShowUserMenu(false);
+      }
+    }
+  }
 
   return (
     <nav className="bg-white shadow-sm" data-oid="iqxvxqw">
@@ -64,7 +81,7 @@ export function Nav() {
                 </button>
                 {/* 用户菜单 */}
                 {showUserMenu && (
-                  <div className="absolute right-0 top-10 w-48 py-2 bg-white rounded-lg shadow-xl border border-gray-100">
+                  <div ref={ele} className="absolute right-0 top-10 w-48 py-2 bg-white rounded-lg shadow-xl border border-gray-100">
                     <div className="px-4 py-2 text-sm text-gray-500 border-b border-gray-100">
                       {userInfo?.username}
                     </div>

@@ -43,7 +43,7 @@ export function TranslateOutput() {
         showToast.error(response.message || "收藏失败");
       }
     } catch (error) {
-      showToast.error("收藏失败，请稍后重试");
+      showToast.error((error as any)?.response?.data?.message || "收藏失败，请稍后重试");
     } finally {
       setIsCollecting(false);
     }

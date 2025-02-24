@@ -8,6 +8,7 @@ import { LoginModal } from "./LoginModal";
 export function Nav() {
   const { isAuthenticated, userInfo, checkAuth, logout } = useAuthStore();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const ele = useRef<HTMLDivElement>(null);
 
@@ -98,14 +99,20 @@ export function Nav() {
               <div className="flex space-x-4" data-oid="egm.3vs">
                 <button
                   className="text-gray-700 hover:text-purple-600 px-3 py-2"
-                  onClick={() => setIsLoginModalOpen(true)}
+                  onClick={() => {
+                    setIsLoginMode(true);
+                    setIsLoginModalOpen(true);
+                  }}
                   data-oid="ae04fxj"
                 >
                   登录
                 </button>
                 <button
                   className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
-                  onClick={() => setIsLoginModalOpen(true)}
+                  onClick={() => {
+                    setIsLoginMode(false);
+                    setIsLoginModalOpen(true);
+                  }}
                   data-oid="6jvxofe"
                 >
                   注册
@@ -118,6 +125,7 @@ export function Nav() {
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
+        initialMode={isLoginMode}
       />
     </nav>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "@/app/store/auth";
 import { motion, AnimatePresence } from "motion/react";
 import { showToast } from "./common/Toast";
@@ -8,17 +8,22 @@ import { showToast } from "./common/Toast";
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialMode?: boolean;
 }
 
-export function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export function LoginModal({ isOpen, onClose, initialMode = true }: LoginModalProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [isLoginMode, setIsLoginMode] = useState(initialMode);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { login, register } = useAuthStore();
+
+  useEffect(() => {
+    setIsLoginMode(initialMode);
+  }, [initialMode]);
 
   if (!isOpen) return null;
 
@@ -26,7 +31,6 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
-
     try {
       if (isLoginMode) {
         await login(username, password);

@@ -1,12 +1,15 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Nav } from "../components/Nav";
 import { collectionApi, CollectionItem } from "../../api/collectionApi";
 import { showToast } from "../components/common/Toast";
 import { ConfirmDialog } from "../components/common/ConfirmDialog";
 import { Pagination } from "../components/common/Pagination";
+import { useAuthStore } from "@/app/store/auth";
+import debounce from "lodash/debounce";
 
 export default function CollectionPage() {
+  const { isAuthenticated, logout } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [collections, setCollections] = useState<CollectionItem[]>([]);
   const [pagination, setPagination] = useState({
@@ -23,29 +26,52 @@ export default function CollectionPage() {
     itemId: null,
   });
 
-  useEffect(() => {
-    const fetchCollections = async () => {
+  // 创建一个防抖的请求函数
+  const debouncedFetch = useCallback(
+    debounce(async (query: string, page: number = 1) => {
       try {
         setLoading(true);
         const response = await collectionApi.getCollections({
-          pageNumber: pagination.page,
+          pageNumber: page,
           pageSize: pagination.pageSize,
-          keyword: searchQuery
+          keyword: query
         });
         setCollections(response.data.list);
-        setPagination({
-          ...pagination,
+        setPagination(prev => ({
+          ...prev,
           total: response.data.total
-        });
+        }));
       } catch (error) {
-        showToast.error("获取收藏失败");
+        showToast.error((error as Error).message || "获取收藏列表失败");
+        if (isAuthenticated) {
+          logout();
+        }
       } finally {
         setLoading(false);
       }
-    };
+    }, 500),
+    [pagination.pageSize, isAuthenticated, logout]
+  );
 
-    fetchCollections();
-  }, [pagination.page, searchQuery]);
+  // 修改搜索框的处理方法
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setPagination(prev => ({ ...prev, page: 1 })); // 重置到第一页
+    debouncedFetch(value);
+  };
+
+  // 监听页码变化
+  useEffect(() => {
+    debouncedFetch(searchQuery, pagination.page);
+  }, [pagination.page, searchQuery, debouncedFetch]);
+
+  // 在组件卸载时取消未执行的防抖函数
+  useEffect(() => {
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, [debouncedFetch]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -90,7 +116,7 @@ export default function CollectionPage() {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
                 placeholder="搜索收藏的翻译..."
                 className="w-full px-4 py-3 pl-12 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm"
                 data-oid=":70aghx"

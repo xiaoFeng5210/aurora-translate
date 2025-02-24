@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-
+import { useAuthStore } from '@/app/store/auth';
 // 创建axios实例
 const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_API_URL : '',
@@ -7,6 +7,18 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401) {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user_info');
+    }
+    return Promise.reject(error);
+  }
+);
+
 
 // 添加请求拦截器设置token
 api.interceptors.request.use((config) => {

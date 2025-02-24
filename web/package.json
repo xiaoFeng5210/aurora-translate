@@ -14,6 +14,7 @@
         "axios": "^1.7.9",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "lodash": "^4.17.21",
         "lucide-react": "^0.438.0",
         "motion": "^12.4.3",
         "next": "14.2.23",
@@ -26,6 +27,7 @@
     },
     "devDependencies": {
         "@types/axios": "^0.14.4",
+        "@types/lodash": "^4.17.15",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",

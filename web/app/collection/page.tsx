@@ -4,6 +4,7 @@ import { Nav } from "../components/Nav";
 import { collectionApi, CollectionItem } from "../../api/collectionApi";
 import { showToast } from "../components/common/Toast";
 import { ConfirmDialog } from "../components/common/ConfirmDialog";
+import { Pagination } from "../components/common/Pagination";
 
 export default function CollectionPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,7 +12,7 @@ export default function CollectionPage() {
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
-    total: 0
+    total: 0,
   });
   const [loading, setLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<{
@@ -31,7 +32,6 @@ export default function CollectionPage() {
           pageSize: pagination.pageSize,
           keyword: searchQuery
         });
-        console.log(response.data.list);
         setCollections(response.data.list);
         setPagination({
           ...pagination,
@@ -62,28 +62,6 @@ export default function CollectionPage() {
     (item: CollectionItem) =>
       item.sourceText.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.targetText.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
-
-  const Pagination = () => (
-    <div className="flex justify-center mt-4">
-      <button
-        disabled={pagination.page === 1 || loading}
-        onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
-        className="px-4 py-2 mx-1 rounded-lg bg-white border border-gray-200 disabled:opacity-50"
-      >
-        上一页
-      </button>
-      <span className="px-4 py-2">
-        第 {pagination.page} 页 / 共 {Math.ceil(pagination.total / pagination.pageSize)} 页
-      </span>
-      <button
-        disabled={(pagination.page * pagination.pageSize) >= pagination.total || loading}
-        onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-        className="px-4 py-2 mx-1 rounded-lg bg-white border border-gray-200 disabled:opacity-50"
-      >
-        下一页
-      </button>
-    </div>
   );
 
   return (
@@ -277,7 +255,13 @@ export default function CollectionPage() {
           </div>
         </div>
       </div>
-      <Pagination />
+      <Pagination
+        currentPage={pagination.page}
+        pageSize={pagination.pageSize}
+        total={pagination.total}
+        loading={loading}
+        onPageChange={(page) => setPagination(prev => ({ ...prev, page }))}
+      />
       <ConfirmDialog
         isOpen={deleteConfirm.isOpen}
         onClose={() => setDeleteConfirm({ isOpen: false, itemId: null })}

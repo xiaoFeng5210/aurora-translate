@@ -211,6 +211,7 @@ func UpdateCollectionTranslation(c *gin.Context) {
 			"code":    -1004,
 			"message": "请求参数没有id",
 		})
+		return
 	}
 	username := c.GetString("username")
 	db := db.GetDB()

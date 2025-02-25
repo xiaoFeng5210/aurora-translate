@@ -115,8 +115,8 @@ export default function CollectionPage() {
         id: editItem.id,
         targetText: editItem.text,
       });
-
-      if (response?.data?.code === 0) {
+      console.log(response);
+      if (response?.code === 0) {
         // 更新本地数据
         setCollections(prev =>
           prev.map(item =>
@@ -125,8 +125,9 @@ export default function CollectionPage() {
               : item
           )
         );
+        showToast.success("更新成功");
       } else {
-        showToast.error(response?.data?.message || "更新失败");
+        showToast.error(response?.message || "更新失败");
       }
 
       setCollections(prev =>
@@ -136,8 +137,6 @@ export default function CollectionPage() {
             : item
         )
       );
-
-      showToast.success("更新成功");
       setEditItem({ id: null, text: '' });
     } catch (error) {
       showToast.error("更新失败");
@@ -377,7 +376,7 @@ export default function CollectionPage() {
                         </Popover>
                         {editItem.id !== item.id && (
                           <Popover
-                            content="编辑译文111111111111111111111111111111111111"
+                            content="编辑译文"
                             position="top"
                             trigger="hover"
                           >

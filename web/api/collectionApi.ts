@@ -151,9 +151,9 @@ export const collectionApi = {
   },
 
   // 更新译文的方法
-  updateTranslation: async (params: { id: number; targetText: string }): Promise<ApiResponse<{ code: number, message: string }>> => {
+  updateTranslation: async (data: { id: number; targetText: string }): Promise<ApiResponse<{ code: number, message: string }>> => {
     try {
-      const response: AxiosResponse<ApiResponse<{ code: number, message: string }>> = await api.post('/api/collection/update', params);
+      const response: AxiosResponse<ApiResponse<{ code: number, message: string }>> = await api.put('/api/v1/collections/update', data);
       return response.data;
     } catch (error) {
       throw new Error(handleApiError(error));

@@ -25,6 +25,13 @@ export default function CollectionPage() {
     isOpen: false,
     itemId: null,
   });
+  const [editItem, setEditItem] = useState<{
+    id: number | null;
+    text: string;
+  }>({
+    id: null,
+    text: '',
+  });
 
   // 创建一个防抖的请求函数
   const debouncedFetch = useCallback(
@@ -81,6 +88,60 @@ export default function CollectionPage() {
       setPagination(prev => ({ ...prev, total: prev.total - 1 }));
     } catch (error) {
       showToast.error("删除失败");
+    }
+  };
+
+  const handleEdit = (item: CollectionItem) => {
+    setEditItem({
+      id: item.id,
+      text: item.targetText,
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setEditItem({
+      id: null,
+      text: '',
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editItem.id) return;
+
+    try {
+      setLoading(true);
+      const response = await collectionApi.updateTranslation({
+        id: editItem.id,
+        targetText: editItem.text,
+      });
+
+      if (response?.data?.code === 0) {
+        // 更新本地数据
+        setCollections(prev =>
+          prev.map(item =>
+            item.id === editItem.id
+              ? { ...item, targetText: editItem.text }
+              : item
+          )
+        );
+      } else {
+        showToast.error(response?.data?.message || "更新失败");
+      }
+
+      setCollections(prev =>
+        prev.map(item =>
+          item.id === editItem.id
+            ? { ...item, targetText: editItem.text }
+            : item
+        )
+      );
+
+      showToast.success("更新成功");
+      setEditItem({ id: null, text: '' });
+    } catch (error) {
+      showToast.error("更新失败");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -209,12 +270,38 @@ export default function CollectionPage() {
                             {item.targetLang}
                           </span>
                         </div>
-                        <div
-                          className="text-gray-800 min-h-[60px]"
-                          data-oid="tg4g1k9"
-                        >
-                          {item.targetText}
-                        </div>
+                        {editItem.id === item.id ? (
+                          <div className="relative">
+                            <textarea
+                              value={editItem.text}
+                              onChange={(e) => setEditItem(prev => ({ ...prev, text: e.target.value }))}
+                              className="w-full min-h-[60px] p-2 text-gray-800 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            />
+                            <div className="flex justify-end mt-2 space-x-2">
+                              <button
+                                onClick={handleCancelEdit}
+                                className="px-3 py-1 text-sm text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200"
+                                disabled={loading}
+                              >
+                                取消
+                              </button>
+                              <button
+                                onClick={handleSaveEdit}
+                                className="px-3 py-1 text-sm text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                                disabled={loading}
+                              >
+                                {loading ? '保存中...' : '保存'}
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            className="text-gray-800 min-h-[60px]"
+                            data-oid="tg4g1k9"
+                          >
+                            {item.targetText}
+                          </div>
+                        )}
                       </div>
                     </div>
                     {/* 底部操作栏 */}
@@ -250,6 +337,27 @@ export default function CollectionPage() {
                             />
                           </svg>
                         </button>
+                        {editItem.id !== item.id && (
+                          <button
+                            onClick={() => handleEdit(item)}
+                            className="text-gray-400 hover:text-purple-600 p-1"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                          </button>
+                        )}
                         <button
                           onClick={() => setDeleteConfirm({ isOpen: true, itemId: item.id })}
                           className="text-gray-400 hover:text-red-500 p-1"

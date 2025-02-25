@@ -197,6 +197,36 @@ func AddCollection(c *gin.Context) {
 	})
 }
 
+func UpdateCollectionTranslation(c *gin.Context) {
+	var req dto.UpdateCollectionTranslationRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":     -1004,
+			"message":  "请求参数错误",
+			"errorMsg": err.Error(),
+		})
+	}
+	if req.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    -1004,
+			"message": "请求参数没有id",
+		})
+	}
+	username := c.GetString("username")
+	db := db.GetDB()
+	if err := db.Model(&dto.Collection{}).Where("username = ? AND id = ?", username, req.ID).Update("target_text", req.TargetText).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":     -1005,
+			"message":  "更新收藏记录失败",
+			"errorMsg": err.Error(),
+		})
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"message": "更新收藏记录成功",
+	})
+}
+
 func DeleteCollectionItem(c *gin.Context) {
 	// 拿到ID
 	id := c.Param("id")

@@ -81,5 +81,12 @@ func Routes(r *gin.Engine) {
 		* @return nil
 		 */
 		authGroup.DELETE("/api/v1/collections/:id", api.DeleteCollectionItem)
+
+		/**
+		* 更新收藏翻译
+		* @param id 收藏ID
+		* @param targetText 目标文本
+		 */
+		authGroup.PUT("/api/v1/collections/update", api.UpdateCollectionTranslation)
 	}
 }

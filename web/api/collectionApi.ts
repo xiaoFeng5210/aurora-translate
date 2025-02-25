@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import { useAuthStore } from '@/app/store/auth';
 // 创建axios实例
 const api = axios.create({
@@ -37,6 +37,13 @@ api.interceptors.request.use((config) => {
 interface BaseResponse {
   code: number;
   message?: string;
+}
+
+/**
+ * 通用API响应结构
+ */
+export interface ApiResponse<T> extends BaseResponse {
+  data: T;
 }
 
 /**
@@ -86,6 +93,27 @@ interface CollectionQueryParams {
 }
 
 /**
+ * 处理API错误
+ */
+const handleApiError = (error: unknown): string => {
+  if (axios.isAxiosError(error)) {
+    const axiosError = error as AxiosError<any>;
+    // 如果服务器返回了错误消息
+    if (axiosError.response?.data?.message) {
+      return axiosError.response.data.message;
+    }
+    // 如果是网络错误
+    if (axiosError.message === 'Network Error') {
+      return '网络错误，请检查您的网络连接';
+    }
+    // 其他Axios错误
+    return axiosError.message || '请求失败';
+  }
+  // 非Axios错误
+  return error instanceof Error ? error.message : '未知错误';
+};
+
+/**
  * 收藏相关API
  */
 export const collectionApi = {
@@ -120,7 +148,17 @@ export const collectionApi = {
     const response: AxiosResponse<BaseResponse> =
       await api.delete(`/api/v1/collections/${id}`);
     return response.data;
-  }
+  },
+
+  // 更新译文的方法
+  updateTranslation: async (params: { id: number; targetText: string }): Promise<ApiResponse<{ code: number, message: string }>> => {
+    try {
+      const response: AxiosResponse<ApiResponse<{ code: number, message: string }>> = await api.post('/api/collection/update', params);
+      return response.data;
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
 };
 
 export type {

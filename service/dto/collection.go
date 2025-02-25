@@ -40,3 +40,8 @@ type CollectionResponse struct {
 type DeleteCollectionItemRequest struct {
 	ID uint `json:"id" binding:"required"`
 }
+
+type UpdateCollectionTranslationRequest struct {
+	ID         uint   `json:"id" binding:"required"`
+	TargetText string `json:"targetText" binding:"required"`
+}

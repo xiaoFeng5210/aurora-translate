@@ -317,8 +317,39 @@ export default function CollectionPage() {
                         data-oid="v2:cjna"
                       >
                         <button
-                          className="text-gray-400 hover:text-purple-600 p-1"
+                          className="text-gray-400 hover:text-purple-600 p-1 relative"
                           data-oid="rf23y8."
+                          onClick={() => {
+                            navigator.clipboard.writeText(item.targetText);
+                            showToast.success("复制成功");
+
+                            // 创建复制成功的动画效果
+                            const button = document.querySelector(`[data-oid="rf23y8."]`);
+                            if (button) {
+                              const successIcon = document.createElement('div');
+                              successIcon.className = 'absolute -top-8 left-1/2 transform -translate-x-1/2 text-green-500 opacity-0 transition-all duration-300';
+                              successIcon.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                              `;
+                              button.appendChild(successIcon);
+
+                              // 动画
+                              setTimeout(() => {
+                                successIcon.classList.replace('opacity-0', 'opacity-100');
+                                successIcon.classList.add('-translate-y-2');
+                              }, 10);
+
+                              // 移除动画元素
+                              setTimeout(() => {
+                                successIcon.classList.replace('opacity-100', 'opacity-0');
+                                setTimeout(() => {
+                                  button.removeChild(successIcon);
+                                }, 300);
+                              }, 1500);
+                            }
+                          }}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

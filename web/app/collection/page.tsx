@@ -7,6 +7,7 @@ import { ConfirmDialog } from "../components/common/ConfirmDialog";
 import { Pagination } from "../components/common/Pagination";
 import { useAuthStore } from "@/app/store/auth";
 import debounce from "lodash/debounce";
+import { Popover } from "../components/common/Popover";
 
 export default function CollectionPage() {
   const { isAuthenticated, logout } = useAuthStore();
@@ -316,62 +317,45 @@ export default function CollectionPage() {
                         className="flex items-center gap-3"
                         data-oid="v2:cjna"
                       >
-                        <button
-                          className="text-gray-400 hover:text-purple-600 p-1 relative"
-                          data-oid="rf23y8."
-                          onClick={() => {
-                            navigator.clipboard.writeText(item.targetText);
-                            showToast.success("复制成功");
-
-                            // 创建复制成功的动画效果
-                            const button = document.querySelector(`[data-oid="rf23y8."]`);
-                            if (button) {
-                              const successIcon = document.createElement('div');
-                              successIcon.className = 'absolute -top-8 left-1/2 transform -translate-x-1/2 text-green-500 opacity-0 transition-all duration-300';
-                              successIcon.innerHTML = `
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                              `;
-                              button.appendChild(successIcon);
-
-                              // 动画
-                              setTimeout(() => {
-                                successIcon.classList.replace('opacity-0', 'opacity-100');
-                                successIcon.classList.add('-translate-y-2');
-                              }, 10);
-
-                              // 移除动画元素
-                              setTimeout(() => {
-                                successIcon.classList.replace('opacity-100', 'opacity-0');
-                                setTimeout(() => {
-                                  button.removeChild(successIcon);
-                                }, 300);
-                              }, 1500);
-                            }
-                          }}
+                        <Popover
+                          content="复制译文"
+                          position="top"
+                          trigger="hover"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            data-oid="o:c.7qm"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                              data-oid=".:z9r9w"
-                            />
-                          </svg>
-                        </button>
-                        {editItem.id !== item.id && (
                           <button
-                            onClick={() => handleEdit(item)}
-                            className="text-gray-400 hover:text-purple-600 p-1"
+                            className="text-gray-400 hover:text-purple-600 p-1 relative"
+                            data-oid="rf23y8."
+                            onClick={() => {
+                              navigator.clipboard.writeText(item.targetText);
+                              showToast.success("复制成功");
+
+                              // 创建复制成功的动画效果
+                              const button = document.querySelector(`[data-oid="rf23y8."]`);
+                              if (button) {
+                                const successIcon = document.createElement('div');
+                                successIcon.className = 'absolute -top-8 left-1/2 transform -translate-x-1/2 text-green-500 opacity-0 transition-all duration-300';
+                                successIcon.innerHTML = `
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                  </svg>
+                                `;
+                                button.appendChild(successIcon);
+
+                                // 动画
+                                setTimeout(() => {
+                                  successIcon.classList.replace('opacity-0', 'opacity-100');
+                                  successIcon.classList.add('-translate-y-2');
+                                }, 10);
+
+                                // 移除动画元素
+                                setTimeout(() => {
+                                  successIcon.classList.replace('opacity-100', 'opacity-0');
+                                  setTimeout(() => {
+                                    button.removeChild(successIcon);
+                                  }, 300);
+                                }, 1500);
+                              }
+                            }}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -379,38 +363,73 @@ export default function CollectionPage() {
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
+                              data-oid="o:c.7qm"
                             >
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                                data-oid=".:z9r9w"
                               />
                             </svg>
                           </button>
-                        )}
-                        <button
-                          onClick={() => setDeleteConfirm({ isOpen: true, itemId: item.id })}
-                          className="text-gray-400 hover:text-red-500 p-1"
-                          data-oid="185g-xi"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            data-oid="zx78668"
+                        </Popover>
+                        {editItem.id !== item.id && (
+                          <Popover
+                            content="编辑译文111111111111111111111111111111111111"
+                            position="top"
+                            trigger="hover"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              data-oid="dz1r42g"
-                            />
-                          </svg>
-                        </button>
+                            <button
+                              onClick={() => handleEdit(item)}
+                              className="text-gray-400 hover:text-purple-600 p-1"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </button>
+                          </Popover>
+                        )}
+                        <Popover
+                          content="删除收藏"
+                          position="top"
+                          trigger="hover"
+                        >
+                          <button
+                            onClick={() => setDeleteConfirm({ isOpen: true, itemId: item.id })}
+                            className="text-gray-400 hover:text-red-500 p-1"
+                            data-oid="185g-xi"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              data-oid="zx78668"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                data-oid="dz1r42g"
+                              />
+                            </svg>
+                          </button>
+                        </Popover>
                       </div>
                     </div>
                   </div>

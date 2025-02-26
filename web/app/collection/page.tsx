@@ -326,7 +326,6 @@ export default function CollectionPage() {
                             data-oid="rf23y8."
                             onClick={() => {
                               navigator.clipboard.writeText(item.targetText);
-                              showToast.success("复制成功");
 
                               // 创建复制成功的动画效果
                               const button = document.querySelector(`[data-oid="rf23y8."]`);

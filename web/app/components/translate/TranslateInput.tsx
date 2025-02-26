@@ -37,7 +37,7 @@ export function TranslateInput() {
 
   return (
     <div
-      className="bg-white rounded-2xl shadow-xl p-6 transform transition-all hover:scale-105"
+      className="bg-white rounded-2xl shadow-xl p-6 transform transition-all"
       data-oid="2l:svra"
     >
       <div className="mb-4" data-oid="9237csh">

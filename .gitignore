@@ -35,6 +35,8 @@ service/logs/
 *.log.*
 service/logs/*.log
 
+.cursorrules
+
 
 
 

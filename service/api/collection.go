@@ -18,6 +18,8 @@ type CollectionQuery struct {
 	Keyword    string `form:"keyword" `             // 搜索关键词(可选)
 	SourceLang string `form:"sourceLang" `          // 源语言(可选)
 	TargetLang string `form:"targetLang" `          // 目标语言(可选)
+	StartTime  string `form:"startTime" `           // 开始时间(可选)
+	EndTime    string `form:"endTime" `             // 结束时间(可选)
 }
 
 // GetCollections 获取收藏列表
@@ -42,6 +44,10 @@ func GetCollections(c *gin.Context) {
 	// 构建查询
 	db := db.GetDB()
 	baseQuery := db.Model(&dto.Collection{}).Where("username = ?", username)
+
+	if query.StartTime != "" && query.EndTime != "" {
+		baseQuery = baseQuery.Where("created_at >= ? AND created_at <= ?", query.StartTime, query.EndTime)
+	}
 
 	// 其他可选条件
 	if query.Keyword != "" {

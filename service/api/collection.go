@@ -44,7 +44,6 @@ func GetCollections(c *gin.Context) {
 	// 构建查询
 	db := db.GetDB()
 	baseQuery := db.Model(&dto.Collection{}).Where("username = ?", username)
-
 	if query.StartTime != "" && query.EndTime != "" {
 		baseQuery = baseQuery.Where("created_at >= ? AND created_at <= ?", query.StartTime, query.EndTime)
 	}

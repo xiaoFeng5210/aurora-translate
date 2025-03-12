@@ -1,6 +1,8 @@
 package db
 
 import (
+	"fmt"
+	"os"
 	"translate-api/dto"
 	"translate-api/utils"
 
@@ -13,7 +15,18 @@ var db *gorm.DB
 
 func DBConnect() (*gorm.DB, error) {
 	logger := utils.GetLogger()
-	dsn := "host=localhost user=xiaofeng password=12345678 dbname=translate-aurora port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+
+	// 从环境变量获取数据库配置
+	host := getEnv("DB_HOST", "localhost")
+	user := getEnv("DB_USER", "xiaofeng")
+	password := getEnv("DB_PASSWORD", "12345678")
+	dbname := getEnv("DB_NAME", "translate-aurora")
+	port := getEnv("DB_PORT", "5432")
+	sslmode := getEnv("DB_SSLMODE", "disable")
+	timezone := getEnv("DB_TIMEZONE", "Asia/Shanghai")
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
+		host, user, password, dbname, port, sslmode, timezone)
 
 	dbCopy, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -40,4 +53,13 @@ func GetDB() *gorm.DB {
 		DBConnect()
 	}
 	return db
+}
+
+// 获取环境变量，如果不存在则返回默认值
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	return value
 }

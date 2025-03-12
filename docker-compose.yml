@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # 后端服务
+  backend:
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    container_name: aurora-translate-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=xiaofeng
+      - DB_PASSWORD=12345678
+      - DB_NAME=translate-aurora
+      - DB_PORT=5432
+      - DB_SSLMODE=disable
+      - DB_TIMEZONE=Asia/Shanghai
+    volumes:
+      - ./service/logs:/root/logs  # 挂载日志目录
+    depends_on:
+      - postgres
+    networks:
+      - aurora-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # 前端服务 - 使用Nginx提供静态文件
+  frontend:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: aurora-translate-frontend
+    restart: always
+    ports:
+      - "80:80"  # 修改为80端口
+    depends_on:
+      - backend
+    networks:
+      - aurora-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # PostgreSQL数据库
+  postgres:
+    image: postgres:14-alpine
+    container_name: aurora-translate-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=xiaofeng
+      - POSTGRES_PASSWORD=12345678
+      - POSTGRES_DB=translate-aurora
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - aurora-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  aurora-network:
+    driver: bridge
+
+volumes:
+  postgres-data: 

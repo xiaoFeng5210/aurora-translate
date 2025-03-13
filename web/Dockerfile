@@ -27,27 +27,8 @@ FROM nginx:alpine
 # 复制静态文件到Nginx目录
 COPY --from=builder /app/out /usr/share/nginx/html
 
-# 创建自定义Nginx配置
-RUN echo 'server { \
-    listen 80; \
-    server_name localhost; \
-    root /usr/share/nginx/html; \
-    index index.html; \
-    \
-    # 处理前端路由 \
-    location / { \
-        try_files $uri $uri/ /index.html; \
-    } \
-    \
-    # API代理 - 将/api开头的请求转发到后端服务 \
-    location /api/ { \
-        proxy_pass http://backend:8080/; \
-        proxy_set_header Host $host; \
-        proxy_set_header X-Real-IP $remote_addr; \
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; \
-        proxy_set_header X-Forwarded-Proto $scheme; \
-    } \
-}' > /etc/nginx/conf.d/default.conf
+# 复制Nginx配置文件
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # 暴露端口
 EXPOSE 80

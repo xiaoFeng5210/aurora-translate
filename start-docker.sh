@@ -30,7 +30,6 @@ chmod +x deploy-docker.sh
 echo -e "${YELLOW}开始部署...${NC}"
 ./deploy-docker.sh
 
-echo -e "${GREEN}部署完成！${NC}"
 echo -e "${GREEN}您可以通过以下命令查看日志:${NC}"
 echo "前端日志: docker logs -f aurora-translate-frontend"
 echo "后端日志: docker logs -f aurora-translate-backend"

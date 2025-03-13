@@ -40,8 +40,3 @@ echo -e "${GREEN}前端访问地址: http://localhost${NC}"
 echo -e "${GREEN}后端API地址: http://localhost:8080${NC}"
 echo -e "${GREEN}数据库地址: localhost:5432${NC}"
 
-# 显示日志的提示
-echo -e "${YELLOW}查看容器日志:${NC}"
-echo "前端日志: docker logs -f aurora-translate-frontend"
-echo "后端日志: docker logs -f aurora-translate-backend"
-echo "数据库日志: docker logs -f aurora-translate-postgres" 

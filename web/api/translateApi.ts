@@ -4,9 +4,6 @@ const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_API_URL : '',
   headers: {
     'Content-Type': 'application/json',
-    // 配置跨域
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   },
 });
 

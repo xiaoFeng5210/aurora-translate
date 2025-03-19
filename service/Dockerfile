@@ -1,6 +1,8 @@
 # 第一阶段: 构建阶段
 FROM golang:1.24 AS builder
 
+ENV GOPROXY=https://mirrors.aliyun.com/goproxy/
+
 # 设置工作目录
 WORKDIR /app
 

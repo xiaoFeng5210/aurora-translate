@@ -58,6 +58,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         showLoginModal: false,
         userInfo: { username }
       });
+      get().updateUserInfo({ username });
     } catch (error) {
       throw error;
     }

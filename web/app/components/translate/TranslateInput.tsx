@@ -3,6 +3,8 @@
 import { useTranslateStore, MAX_INPUT_LENGTH } from "@/app/store/translate";
 import { useDevice } from "@/app/hooks/useDevice";
 import { motion } from "motion/react";
+import { useState, useMemo, CSSProperties } from "react";
+import { isMobile } from "@/lib/utils";
 
 const languages = [
   { code: "en", name: "English" },
@@ -12,6 +14,8 @@ const languages = [
 ];
 
 export function TranslateInput() {
+
+  const [focursInput, setFocursInput] = useState(false)
   const {
     inputText,
     selectedLanguage,
@@ -21,7 +25,6 @@ export function TranslateInput() {
     setSelectedLanguage,
     setOutputText,
   } = useTranslateStore();
-  const { isMobile } = useDevice();
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -34,6 +37,23 @@ export function TranslateInput() {
     setInputText("");
     setOutputText("");
   };
+
+  const textAreaFocus = () => {
+    if (isMobile()) {
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: 118,
+          behavior: "smooth"
+        })
+        const textArea = document.querySelector("textarea")
+        if (textArea) {
+          textArea.focus()
+        }
+      })
+    }
+    setFocursInput(true)
+  }
+
 
   return (
     <div
@@ -80,6 +100,8 @@ export function TranslateInput() {
           <textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
+            onFocus={textAreaFocus}
+            onBlur={() => setFocursInput(false)}
             onKeyPress={handleKeyPress}
             className="w-full h-48 p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
             placeholder="请输入需要翻译的文字..."

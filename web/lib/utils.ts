@@ -103,3 +103,12 @@ export function getRandom(options: {
   }
 }
 
+/**
+ * 检测是否是手机端
+ */
+export function isMobile() {
+  const condition1 = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const condition2 = window.innerWidth < 768;
+  return condition1 || condition2;
+}
+

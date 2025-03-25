@@ -3,6 +3,7 @@ import path from 'path';
 const nextConfig = {
     reactStrictMode: false,
     output: 'export',
+    trailingSlash: true,
     async rewrites() {
         return [
             {

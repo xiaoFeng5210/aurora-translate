@@ -8,6 +8,7 @@ import { Pagination } from "../components/common/Pagination";
 import { useAuthStore } from "@/app/store/auth";
 import debounce from "lodash/debounce";
 import { Popover } from "../components/common/Popover";
+import { copyClipboard } from "../../lib/utils";
 
 export default function CollectionPage() {
   const { isAuthenticated, logout } = useAuthStore();
@@ -324,10 +325,10 @@ export default function CollectionPage() {
                           <button
                             className="text-gray-400 hover:text-purple-600 p-1 relative"
                             data-oid="rf23y8."
-                            onClick={() => {
-                              navigator.clipboard.writeText(item.targetText);
-
-                              // 创建复制成功的动画效果
+                            onClick={async () => {
+                              try {
+                                await copyClipboard(item.targetText);
+                                // 创建复制成功的动画效果
                               const button = document.querySelector(`[data-oid="rf23y8."]`);
                               if (button) {
                                 const successIcon = document.createElement('div');
@@ -352,6 +353,10 @@ export default function CollectionPage() {
                                     button.removeChild(successIcon);
                                   }, 300);
                                 }, 1500);
+                              }
+
+                              } catch {
+                                showToast.error("复制失败");
                               }
                             }}
                           >

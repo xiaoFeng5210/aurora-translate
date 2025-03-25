@@ -25,7 +25,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates tzdata
 
 # 设置工作目录
-WORKDIR /root22
+WORKDIR /root
 
 # 创建日志目录
 RUN mkdir -p /root/logs

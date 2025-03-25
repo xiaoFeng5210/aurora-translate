@@ -19,7 +19,7 @@ services:
       - DB_SSLMODE=disable
       - DB_TIMEZONE=Asia/Shanghai
     volumes:
-      - ./service/logs:/root22/logs  # 挂载日志目录
+      - ./service/logs:/root/logs  # 挂载日志目录
     depends_on:
       - postgres
     networks:
